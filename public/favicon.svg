@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <!-- Background Gradient for Squircle Icon -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+
+    <!-- WhatsApp Emerald to Electric Blue Gradient -->
+    <linearGradient id="flowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#25D366" />
+      <stop offset="45%" stop-color="#10B981" />
+      <stop offset="80%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+
+    <!-- Dynamic Flow Arrow Gradient -->
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="50%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#818CF8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Rounded Container -->
+  <rect x="4" y="4" width="92" height="92" rx="26" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2.5" />
+
+  <!-- Outer WhatsApp Speech Bubble Shell -->
+  <path
+    d="M26 74 L17 89 L33 84 C38.5 87 44.5 88.5 51 88.5 C72.5 88.5 90 71 90 49.5 C90 28 72.5 10.5 51 10.5 C29.5 10.5 12 28 12 49.5 C12 59.2 15.6 68 21.5 74.8"
+    stroke="url(#flowGrad)"
+    stroke-width="8.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Dynamic S-Curve Flow Beam -->
+  <path
+    d="M25 62 C35 55, 44 53, 62 38"
+    stroke="url(#arrowGrad)"
+    stroke-width="8"
+    stroke-linecap="round"
+  />
+
+  <!-- High-Velocity Forward Outreach Arrow Head -->
+  <path
+    d="M52 23 L79 21 L77 48 L70.5 41.5 L58 54 L50 46 L62.5 33.5 Z"
+    fill="url(#arrowGrad)"
+  />
+</svg>
