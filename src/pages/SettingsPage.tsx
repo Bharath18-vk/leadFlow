@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Eye,
   MessageSquare,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { ConfirmModal } from '../components/ui/ConfirmModal';
@@ -32,6 +33,7 @@ interface SettingsPageProps {
   onClearAllData: () => void;
   onRestoreLeads?: (leads: Lead[]) => void;
   onSelectLead?: (lead: Lead) => void;
+  onOpenLegal?: (tab: 'privacy' | 'terms') => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({
@@ -41,6 +43,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   onClearAllData,
   onRestoreLeads,
   onSelectLead,
+  onOpenLegal,
 }) => {
   const { theme, setTheme } = useTheme();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -131,7 +134,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 1: Appearance & Theme Mode */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Appearance & Theme</h2>
@@ -182,7 +185,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 2: Daily Outreach & Currency */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Outreach Goals & Currency</h2>
@@ -234,7 +237,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 3: WhatsApp Launch & Tab Behavior */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-[#25D366]">
             <MessageSquare className="w-5 h-5 fill-current" />
@@ -347,7 +350,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 4: Data Backup & Restore System */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
             <HardDrive className="w-5 h-5" />
@@ -443,7 +446,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 5: Data Integrity Scanner */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className={`p-2 rounded-xl ${integrityReport.warningsCount > 0 ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400' : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400'}`}>
@@ -456,13 +459,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </div>
 
           <span
-            className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${
+            className={`text-xs font-medium px-2.5 py-1 rounded-sm border ${
               integrityReport.warningsCount > 0
                 ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800'
                 : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
             }`}
           >
-            {integrityReport.warningsCount === 0 ? '✓ 100% Healthy' : `${integrityReport.warningsCount} Warnings`}
+            {integrityReport.warningsCount === 0 ? '100% Healthy' : `${integrityReport.warningsCount} Warnings`}
           </span>
         </div>
 
@@ -524,7 +527,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 6: System Information */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400">
             <Database className="w-5 h-5" />
@@ -555,8 +558,40 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
       </div>
 
+      {/* SECTION: Compliance & Legal Policies (Items 26 and 27) */}
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-5 space-y-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
+            <ShieldCheck className="w-4 h-4" strokeWidth={1.5} />
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Compliance & Legal Policies</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Strict local-first zero-telemetry guarantee and software license terms</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 pt-1">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onOpenLegal && onOpenLegal('terms')}
+            className="text-xs"
+          >
+            Terms of Service
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onOpenLegal && onOpenLegal('privacy')}
+            className="text-xs"
+          >
+            Privacy Policy
+          </Button>
+        </div>
+      </div>
+
       {/* SECTION 7: Danger Zone */}
-      <div className="bg-rose-50/50 dark:bg-rose-950/30 rounded-2xl border border-rose-200 dark:border-rose-900/60 p-5 shadow-xs space-y-3">
+      <div className="bg-rose-50/50 dark:bg-rose-950/30 rounded-lg border border-rose-200 dark:border-rose-900/60 p-5 shadow-xs space-y-3">
         <div className="flex items-center gap-2.5 text-rose-800 dark:text-rose-300">
           <AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400" />
           <h2 className="text-sm font-bold">Danger Zone</h2>

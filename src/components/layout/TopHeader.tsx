@@ -1,5 +1,5 @@
 import React from 'react';
-import { UploadCloud, Download, Sparkles, Menu } from 'lucide-react';
+import { UploadCloud, Download, Layers, Menu } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
@@ -23,37 +23,37 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   hasLeads,
 }) => {
   return (
-    <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 transition-colors">
-      <div className="px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <header className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 sticky top-0 z-20 transition-colors font-sans">
+      <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Title & Subtitle */}
         <div className="flex items-center gap-3">
           {onToggleMobileMenu && (
             <button
               onClick={onToggleMobileMenu}
-              className="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="md:hidden p-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
               aria-label="Toggle Navigation"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-5 h-5" strokeWidth={1.5} />
             </button>
           )}
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">{title}</h1>
-            {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+            <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">{title}</h1>
+            {subtitle && <p className="text-xs text-zinc-500 dark:text-zinc-400">{subtitle}</p>}
           </div>
         </div>
 
         {/* Action Buttons & Theme Toggle */}
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           <ThemeToggle />
 
           <Button
             variant="outline"
             size="sm"
             onClick={onLoadDemo}
-            icon={<Sparkles className="w-4 h-4 text-amber-500" />}
+            icon={<Layers className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />}
             title="Load 10 realistic Bangalore interior-design leads for quick UI testing"
           >
-            Load Demo Data
+            Load Sample Dataset
           </Button>
 
           {hasLeads && (
@@ -61,9 +61,9 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               variant="outline"
               size="sm"
               onClick={onExport}
-              icon={<Download className="w-4 h-4 text-slate-600 dark:text-slate-400" />}
+              icon={<Download className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />}
             >
-              Export Leads
+              Export
             </Button>
           )}
 
@@ -71,9 +71,9 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             variant="primary"
             size="sm"
             onClick={onOpenImport}
-            icon={<UploadCloud className="w-4 h-4" />}
+            icon={<UploadCloud className="w-3.5 h-3.5" strokeWidth={1.5} />}
           >
-            Import Excel / CSV
+            Import Excel
           </Button>
         </div>
       </div>

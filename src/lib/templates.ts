@@ -1,4 +1,4 @@
-﻿import type { Lead } from '../types/lead';
+import type { Lead } from '../types/lead';
 import type { MessageTemplate } from '../types/template';
 
 export const TEMPLATES_STORAGE_KEY = 'leadflow_templates_v1';
@@ -9,7 +9,7 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     id: 'template-website-opportunity',
     name: 'Cold Website Opportunity (Standard)',
     category: 'discovery',
-    content: `Hi! 👋\n\nI came across {{business_name}} on Google and had a look at your work in {{city}}.\n\nI'm a web developer, and I noticed you don't currently have a dedicated website. For {{category}}, a clean mobile-friendly portfolio can turn project inquiries into direct WhatsApp calls and help clients easily view your past work.\n\nI actually prepared a tailored concept demo for {{business_name}}.\n\nWould you like me to send over the link? 🙂`,
+    content: `Hello,\n\nI came across {{business_name}} on Google and reviewed your work in {{city}}.\n\nI noticed you do not currently have a dedicated website. For {{category}}, a clean mobile-friendly portfolio can turn project inquiries into direct WhatsApp conversations and help clients easily evaluate your past work.\n\nI prepared a tailored concept demo for {{business_name}}.\n\nWould you like me to send over the link?`,
     isDefault: true,
     isBuiltIn: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -19,7 +19,7 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     id: 'template-social-proof',
     name: 'High Rating & Social Proof',
     category: 'social_proof',
-    content: `Hello {{business_name}} team! ⭐\n\nI was browsing top-rated {{category}} services in {{city}} and was genuinely impressed by your {{rating}}★ rating across {{reviews}} client reviews.\n\nBusinesses with your strong reputation convert significantly more leads when backed by a fast, modern portfolio website that showcases your credibility.\n\nWould it be alright if I share a 1-minute preview demo I put together for {{business_name}}?`,
+    content: `Hello {{business_name}} team,\n\nI was reviewing top-rated {{category}} services in {{city}} and noted your {{rating}} rating across {{reviews}} client reviews.\n\nBusinesses with your strong reputation convert significantly more leads when backed by a fast, modern portfolio website that showcases your credibility.\n\nWould it be alright if I share a 1-minute preview demo I put together for {{business_name}}?`,
     isDefault: false,
     isBuiltIn: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -29,7 +29,7 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     id: 'template-quick-direct',
     name: 'Quick & Direct Question',
     category: 'direct',
-    content: `Hi {{business_name}} team, quick question — are you taking on new {{category}} projects in {{city}} right now?\n\nI noticed your Google Maps profile has great feedback ({{rating}}★), but no active website link. We help local businesses launch modern showcase websites that drive direct WhatsApp inquiries.\n\nOpen to seeing a quick concept?`,
+    content: `Hi {{business_name}} team, quick question - are you taking on new {{category}} projects in {{city}} right now?\n\nI noticed your Google Maps profile has strong feedback ({{rating}}), but no active website link. We help local businesses launch modern showcase websites that drive direct WhatsApp inquiries.\n\nOpen to reviewing a quick concept?`,
     isDefault: false,
     isBuiltIn: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -39,7 +39,7 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     id: 'template-portfolio-photos',
     name: 'Portfolio & Photos Showcase',
     category: 'discovery',
-    content: `Hey {{business_name}}! 📸\n\nI saw your {{images}} photos on Google Maps — your {{category}} work looks incredible.\n\nRight now, many potential customers look for a clean catalog or portfolio before calling. We build custom, fast-loading showcase sites that highlight your best work and make booking effortless.\n\nCan I share a live demo tailored for {{business_name}}?`,
+    content: `Hello {{business_name}},\n\nI saw your {{images}} photos on Google Maps - your {{category}} portfolio looks exceptional.\n\nProspective clients frequently look for a clean catalog or portfolio before calling. We build custom, fast-loading showcase sites that highlight your best projects and make booking direct.\n\nCan I share a live demo tailored for {{business_name}}?`,
     isDefault: false,
     isBuiltIn: true,
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -49,7 +49,7 @@ export const DEFAULT_TEMPLATES: MessageTemplate[] = [
     id: 'template-followup-nudge',
     name: 'Polite Follow-up Nudge',
     category: 'followup',
-    content: `Hi {{business_name}} team! Just following up on my previous note regarding the custom website demo for {{business_name}}.\n\nNo pressure at all — just wanted to check if improving your online conversions is on your radar this month?\n\nHappy to share the demo link whenever you have a minute. Have a great week ahead!`,
+    content: `Hi {{business_name}} team, following up on my previous note regarding the custom website demo for {{business_name}}.\n\nNo pressure at all - just wanted to check if improving your online conversions is on your radar this month?\n\nHappy to share the demo link whenever you have a minute. Have a productive week ahead.`,
     isDefault: false,
     isBuiltIn: true,
     createdAt: '2026-01-01T00:00:00.000Z',

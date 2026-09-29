@@ -120,14 +120,14 @@ export function generateSmartMessage(lead: {
 
   let introSocialProof = '';
   if (lead.rating && lead.reviews && lead.reviews > 5) {
-    introSocialProof = ` and noticed you already have a strong presence there — ${lead.rating}★ with ${lead.reviews} reviews.`;
+    introSocialProof = ` and noticed you already have a strong presence there - ${lead.rating} rating with ${lead.reviews} reviews.`;
   } else if (lead.images && lead.images > 15) {
     introSocialProof = ` and noticed you have a strong portfolio of work showcased with ${lead.images} photos.`;
   } else {
     introSocialProof = ` and had a look at your ${category} work.`;
   }
 
-  return `Hi! 👋\n\nI came across ${name} on Google${introSocialProof}\n\nI’m a freelance web developer, and I noticed you don’t currently have a dedicated website. For an interior-design business, a premium website can turn your project photos into a proper portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI actually had an idea for a website concept for ${name}.\n\nWould you like me to send you a quick demo? 🙂`;
+  return `Hello,\n\nI came across ${name} on Google${introSocialProof}\n\nI am a freelance web developer, and I noticed you do not currently have a dedicated website. For an interior-design business, a clean website can turn your project photos into a proper portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI prepared an idea for a website concept for ${name}.\n\nWould you like me to send you a quick demo?`;
 }
 
 export function normalizeRawRow(

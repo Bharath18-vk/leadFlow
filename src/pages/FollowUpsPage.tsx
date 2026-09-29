@@ -177,11 +177,11 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
               variant="outline"
               size="sm"
               onClick={(e) => handleMarkDone(lead.id, e)}
-              icon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
+              icon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />}
               className="text-xs py-1 px-2.5"
               title="Complete this follow-up (clears date, retains status)"
             >
-              ✓ Done
+              Done
             </Button>
           </div>
 
@@ -189,7 +189,7 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
             <button
               type="button"
               onClick={(e) => handleReschedule(lead.id, 1, e)}
-              className="text-[11px] px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md font-medium transition-colors"
+              className="text-[11px] px-2 py-1 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-sm font-medium transition-colors"
               title="Reschedule to Tomorrow"
             >
               +1d
@@ -197,7 +197,7 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
             <button
               type="button"
               onClick={(e) => handleReschedule(lead.id, 3, e)}
-              className="text-[11px] px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md font-medium transition-colors"
+              className="text-[11px] px-2 py-1 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-sm font-medium transition-colors"
               title="Reschedule in 3 days"
             >
               +3d
@@ -205,7 +205,7 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
             <button
               type="button"
               onClick={(e) => handleReschedule(lead.id, 7, e)}
-              className="text-[11px] px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md font-medium transition-colors"
+              className="text-[11px] px-2 py-1 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-sm font-medium transition-colors"
               title="Reschedule in 7 days"
             >
               +7d
@@ -222,34 +222,34 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <CalendarClock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Follow-up Pipeline</h1>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+            <CalendarClock className="w-5 h-5 text-zinc-900 dark:text-zinc-100" strokeWidth={1.5} />
+            <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Follow-up Pipeline</h1>
+            <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-sm bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
               {totalFollowUps} Scheduled
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Never lose track of interested prospects. Keep deals moving toward a demo and close.
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            Track interested prospects and scheduled touches
           </p>
         </div>
 
         {/* Search Input */}
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={1.5} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search follow-ups..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
           />
         </div>
       </div>
 
       {totalFollowUps === 0 ? (
-        <div className="text-center py-16 px-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
-          <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto">
-            <Clock className="w-6 h-6" />
+        <div className="text-center py-16 px-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-4">
+          <div className="w-10 h-10 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center mx-auto border border-zinc-200 dark:border-zinc-700">
+            <Clock className="w-5 h-5" strokeWidth={1.5} />
           </div>
           <div className="space-y-1">
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">No Follow-ups Scheduled</h2>

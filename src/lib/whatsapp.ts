@@ -20,7 +20,7 @@ export function normalizePhoneForWhatsApp(rawPhone?: string): PhoneNormalization
       valid: false,
       internationalNumber: '',
       displayPhone: '',
-      error: 'WhatsApp unavailable — phone number missing',
+      error: 'WhatsApp unavailable - phone number missing',
     };
   }
 

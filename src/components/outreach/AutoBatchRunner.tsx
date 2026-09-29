@@ -5,10 +5,9 @@ import {
   Square,
   SkipForward,
   Clock,
-  CheckCircle2,
-  Zap,
+  CheckCircle,
   Sliders,
-  Trophy,
+  Flame,
 } from 'lucide-react';
 import type { Lead } from '../../types/lead';
 import { openWhatsAppChat } from '../../lib/whatsapp';
@@ -95,7 +94,7 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
   const processNextLead = () => {
     const currentQueue = queueRef.current;
     if (currentQueue.length === 0) {
-      // All leads contacted!
+      // All leads contacted
       setStatus('completed');
       if (countdownTimerRef.current) clearInterval(countdownTimerRef.current);
       return;
@@ -187,7 +186,6 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
   // Skip Current Lead
   const handleSkip = () => {
     if (countdownTimerRef.current) clearInterval(countdownTimerRef.current);
-    // Move to next without marking contacted
     if (queue.length > 1) {
       processNextLead();
     } else {
@@ -237,21 +235,21 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
     return remainingLeads * delaySeconds;
   }, [queue.length, delaySeconds, status]);
 
-  // Completion Screen
+  // Completion Screen (Item 7: No emojis, Item 19: No soft 2xl corners)
   if (status === 'completed') {
     return (
-      <div className="bg-emerald-500/10 dark:bg-emerald-950/40 border-2 border-emerald-500/30 dark:border-emerald-500/30 rounded-2xl p-6 shadow-sm text-slate-900 dark:text-slate-100 animate-in zoom-in-95 duration-200">
+      <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 text-zinc-900 dark:text-zinc-100">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 text-center sm:text-left">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/30">
-              <Trophy className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center shrink-0">
+              <CheckCircle className="w-5 h-5 text-emerald-500" strokeWidth={1.5} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-emerald-900 dark:text-emerald-300">
-                Batch Outreach Complete! 🎉
+              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                Batch Outreach Complete
               </h3>
-              <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
-                Successfully processed {completedCount} leads in {formatTime(elapsedTime)}. All prospects are contacted and tracked in CRM.
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Successfully processed {completedCount} leads in {formatTime(elapsedTime)}. All prospects are tracked in CRM.
               </p>
             </div>
           </div>
@@ -260,8 +258,7 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
             variant="primary"
             size="sm"
             onClick={handleReset}
-            icon={<CheckCircle2 className="w-4 h-4" />}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs"
+            className="text-xs"
           >
             Done
           </Button>
@@ -270,41 +267,31 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
     );
   }
 
-  // Active Running / Paused Runner Card
+  // Active Running / Paused Runner Card (Item 22: No radial orbs, Item 1: No harsh gradient)
   if (status === 'running' || status === 'paused') {
     const progressPercent = totalInBatch > 0 ? Math.min(100, Math.round((completedCount / totalInBatch) * 100)) : 0;
 
     return (
-      <div className="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-xl border border-slate-800 space-y-4 relative overflow-hidden animate-in slide-in-from-top-3 duration-200">
-        {/* Glowing background accent */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="bg-zinc-900 text-white rounded-lg p-5 border border-zinc-800 space-y-4 relative overflow-hidden font-sans">
         {/* Top Status Bar */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
           <div className="flex items-center gap-2.5">
-            <span className="relative flex h-3 w-3">
-              {status === 'running' ? (
-                <>
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
-                </>
-              ) : (
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400" />
-              )}
+            <span className="relative flex h-2.5 w-2.5">
+              <span className={`inline-flex rounded-full h-2.5 w-2.5 ${status === 'running' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
             </span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold tracking-tight">
-                  {status === 'running' ? 'Auto-Batch Running' : 'Batch Paused'}
+                <span className="text-xs font-bold tracking-tight">
+                  {status === 'running' ? 'Auto-Batch Active' : 'Batch Paused'}
                 </span>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                  {completedCount} / {totalInBatch} Leads ({progressPercent}%)
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700 tabular-nums">
+                  {completedCount} / {totalInBatch} ({progressPercent}%)
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] text-zinc-400 mt-0.5">
                 {status === 'running'
-                  ? `Opening WhatsApp automatically • ~${formatTime(estimatedRemaining)} remaining`
-                  : 'Outreach paused. Click Resume to continue countdown.'}
+                  ? `Advancing queue: approximately ${formatTime(estimatedRemaining)} remaining`
+                  : 'Outreach paused. Click Resume to continue.'}
               </p>
             </div>
           </div>
@@ -316,8 +303,8 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handlePause}
-                icon={<Pause className="w-3.5 h-3.5 text-amber-400" />}
-                className="text-xs border-slate-700 hover:bg-slate-800 text-slate-200"
+                icon={<Pause className="w-3.5 h-3.5" />}
+                className="text-xs border-zinc-700 bg-zinc-800 text-zinc-200 hover:bg-zinc-700"
               >
                 Pause
               </Button>
@@ -326,8 +313,8 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
                 variant="primary"
                 size="sm"
                 onClick={handleResume}
-                icon={<Play className="w-3.5 h-3.5 text-white" />}
-                className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                icon={<Play className="w-3.5 h-3.5" />}
+                className="text-xs"
               >
                 Resume
               </Button>
@@ -337,9 +324,8 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
               variant="outline"
               size="sm"
               onClick={handleSendNow}
-              icon={<Zap className="w-3.5 h-3.5 text-amber-400" />}
-              className="text-xs border-slate-700 hover:bg-slate-800 text-slate-200"
-              title="Skip remaining timer and immediately advance to next lead"
+              className="text-xs border-zinc-700 bg-zinc-800 text-zinc-200 hover:bg-zinc-700"
+              title="Skip remaining timer and advance to next lead"
             >
               Next Now
             </Button>
@@ -349,7 +335,7 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
               size="sm"
               onClick={handleSkip}
               icon={<SkipForward className="w-3.5 h-3.5" />}
-              className="text-xs border-slate-700 hover:bg-slate-800 text-slate-400 hover:text-slate-200"
+              className="text-xs border-zinc-700 bg-zinc-800 text-zinc-400 hover:text-zinc-200"
               title="Skip this lead without marking contacted"
             >
               Skip
@@ -360,48 +346,48 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
               size="sm"
               onClick={handleStop}
               icon={<Square className="w-3.5 h-3.5 text-rose-400" />}
-              className="text-xs border-slate-700 hover:bg-slate-800 text-rose-300"
+              className="text-xs border-zinc-700 bg-zinc-800 text-rose-300 hover:bg-zinc-700"
             >
               Stop
             </Button>
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* High-Precision Progress Bar (Item 1: No harsh rainbow gradient) */}
         <div className="space-y-1 relative z-10">
-          <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 transition-all duration-300"
+              className="h-full bg-emerald-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
 
-        {/* Current Active Lead Card in Runner */}
+        {/* Current Target Card in Runner */}
         {currentLead && (
-          <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+          <div className="bg-zinc-950/60 border border-zinc-800 rounded-md p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-blue-400">
-                  Current Target:
+                <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">
+                  Target:
                 </span>
-                <span className="text-sm font-bold text-white truncate max-w-[280px]">
+                <span className="text-xs font-bold text-zinc-100 truncate max-w-[280px]">
                   {currentLead.businessName}
                 </span>
                 <TierBadge tier={currentLead.leadTier} score={currentLead.leadScore} />
               </div>
-              <div className="text-xs text-slate-400 flex items-center gap-2 font-mono">
+              <div className="text-[11px] text-zinc-400 flex items-center gap-2 font-mono">
                 <span>{formatPhoneNumber(currentLead.phone)}</span>
-                {currentLead.city && <span>• {currentLead.city}</span>}
-                {currentLead.rating && <span>• {currentLead.rating}★</span>}
+                {currentLead.city && <span>/ {currentLead.city}</span>}
+                {currentLead.rating && <span>/ {currentLead.rating} Star</span>}
               </div>
             </div>
 
             {/* Countdown Badge */}
             <div className="flex items-center gap-2 self-end sm:self-center">
-              <div className="px-3.5 py-1.5 rounded-xl bg-blue-950/70 border border-blue-500/40 text-blue-300 font-mono text-xs font-bold flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 animate-spin text-blue-400" />
-                <span>Next lead in {countdown}s</span>
+              <div className="px-3 py-1 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-200 font-mono text-xs font-medium flex items-center gap-1.5 tabular-nums">
+                <Clock className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Next in {countdown}s</span>
               </div>
             </div>
           </div>
@@ -410,26 +396,26 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
     );
   }
 
-  // Idle State: Start Banner & Configuration
+  // Idle State: Clean Architectural Banner
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs transition-colors space-y-3">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-3 font-sans">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left info */}
         <div className="flex items-start sm:items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-            <Zap className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 flex items-center justify-center shrink-0">
+            <Flame className="w-4 h-4 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 Auto-Batch Outreach Runner
               </h3>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                1-Click Hands-Free Mode
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-sm bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                Paced Mode
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Hands-free automation that steps through all {queue.length} queue leads with safe human-paced delays ({delaySeconds}s interval).
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
+              Sequences through all {queue.length} queue leads with human-paced intervals ({delaySeconds}s delay).
             </p>
           </div>
         </div>
@@ -440,8 +426,8 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setShowSettings(!showSettings)}
-            icon={<Sliders className="w-3.5 h-3.5 text-slate-500" />}
-            className="text-xs text-slate-600 dark:text-slate-300"
+            icon={<Sliders className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />}
+            className="text-xs"
             title="Configure interval delay and safety options"
           >
             {delaySeconds}s Delay
@@ -452,8 +438,8 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
             size="sm"
             onClick={handleStart}
             disabled={queue.length === 0}
-            icon={<Zap className="w-4 h-4 fill-current" />}
-            className="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs px-4"
+            icon={<Play className="w-3.5 h-3.5 fill-current" />}
+            className="text-xs font-semibold px-3.5"
           >
             Start Auto-Batch ({queue.length})
           </Button>
@@ -462,26 +448,26 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
 
       {/* Expandable Settings Bar */}
       {showSettings && (
-        <div className="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="pt-3 mt-2 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-4 text-xs">
           {/* Preset Chips */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
               Delay Interval:
             </span>
             {[
-              { val: 4, label: '4s (Fast)' },
-              { val: 6, label: '6s (Recommended Safe)' },
-              { val: 9, label: '9s (Extra Safe)' },
-              { val: 12, label: '12s (Slow & Steady)' },
+              { val: 4, label: '4s Fast' },
+              { val: 6, label: '6s Standard' },
+              { val: 9, label: '9s Safe' },
+              { val: 12, label: '12s Relaxed' },
             ].map((preset) => (
               <button
                 key={preset.val}
                 type="button"
                 onClick={() => setDelaySeconds(preset.val)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                className={`px-2 py-0.5 rounded-md text-[11px] font-medium border transition-colors ${
                   delaySeconds === preset.val
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-zinc-900 dark:border-zinc-100'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                 }`}
               >
                 {preset.label}
@@ -490,13 +476,13 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
           </div>
 
           {/* Toggle Switches */}
-          <div className="flex items-center gap-4 text-slate-600 dark:text-slate-300">
+          <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
             <label className="flex items-center gap-1.5 cursor-pointer">
               <input
                 type="checkbox"
                 checked={autoMark}
                 onChange={(e) => setAutoMark(e.target.checked)}
-                className="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500"
+                className="w-3.5 h-3.5 rounded text-zinc-900 focus:ring-zinc-500"
               />
               <span className="text-[11px] font-medium">Auto-mark Contacted</span>
             </label>
@@ -506,9 +492,9 @@ export const AutoBatchRunner: React.FC<AutoBatchRunnerProps> = ({
                 type="checkbox"
                 checked={randomizeVariance}
                 onChange={(e) => setRandomizeVariance(e.target.checked)}
-                className="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500"
+                className="w-3.5 h-3.5 rounded text-zinc-900 focus:ring-zinc-500"
               />
-              <span className="text-[11px] font-medium">Human-like Jitter (±1s)</span>
+              <span className="text-[11px] font-medium">Natural Jitter (+-1s)</span>
             </label>
           </div>
         </div>

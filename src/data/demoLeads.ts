@@ -26,7 +26,7 @@ export const DEMO_LEADS: Lead[] = [
     updatedAt: new Date().toISOString(),
     googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=FACTORY%20PRICE%20INTERIO',
     personalizedMessage:
-      'Hi! 👋\n\nI came across FACTORY PRICE INTERIO on Google and noticed you already have a strong presence there — 4.9★ with 144 reviews.\n\nI’m a freelance web developer, and I noticed you don’t currently have a dedicated website. For an interior-design business, a premium website can turn your project photos into a proper portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI actually had an idea for a website concept for FACTORY PRICE INTERIO.\n\nWould you like me to send you a quick demo? 🙂',
+      'Hello,\n\nI came across FACTORY PRICE INTERIO on Google and noticed you already have a strong presence there - 4.9 rating with 144 reviews.\n\nI am a freelance web developer, and I noticed you do not currently have a dedicated website. For an interior-design business, a clean website can turn your project photos into a proper portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI prepared an idea for a website concept for FACTORY PRICE INTERIO.\n\nWould you like me to send you a quick demo?',
   },
   {
     id: 'demo_lead_2',
@@ -49,7 +49,7 @@ export const DEMO_LEADS: Lead[] = [
     updatedAt: new Date().toISOString(),
     googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Smart%20Home%20INTERIO',
     personalizedMessage:
-      'Hi! 👋\n\nI came across Smart Home INTERIO on Google and noticed you have great reviews — 4.8★ with 98 reviews.\n\nI’m a freelance web developer helping interior designers in Bengaluru convert inquiries into high-ticket projects with a sleek portfolio site.\n\nWould you like to see a quick concept demo for Smart Home INTERIO? 🙂',
+      'Hello,\n\nI came across Smart Home INTERIO on Google and noticed you have great reviews - 4.8 rating with 98 reviews.\n\nI am a freelance web developer helping interior designers in Bengaluru convert inquiries into high-ticket projects with a sleek portfolio site.\n\nWould you like to see a quick concept demo for Smart Home INTERIO?',
   },
   {
     id: 'demo_lead_3',
@@ -71,7 +71,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across Prashasthi Modular Interiors on Google and had a look at your modular interior work in RR Nagar.\n\nI design high-converting portfolio websites for interior studios. Would you be open to seeing a quick concept demo? 🙂',
+      'Hello,\n\nI came across Prashasthi Modular Interiors on Google and reviewed your modular interior work in RR Nagar.\n\nI design high-converting portfolio websites for interior studios. Would you be open to seeing a quick concept demo?',
   },
   {
     id: 'demo_lead_4',
@@ -93,7 +93,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across WHYTE ARCHITECTS & INTERIORS on Google and noticed your stellar 4.9★ rating and rich portfolio photos.\n\nA dedicated interactive website would elevate your brand further. Would you like me to send you a quick preview demo? 🙂',
+      'Hello,\n\nI came across WHYTE ARCHITECTS & INTERIORS on Google and noticed your 4.9 rating and rich portfolio photos.\n\nA dedicated website would elevate your brand further. Would you like me to send you a quick preview demo?',
   },
   {
     id: 'demo_lead_5',
@@ -115,7 +115,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI saw Dream Space -TY, Design Studio on Google Maps and loved your modern residential project photos.\n\nI build clean, rapid-loading portfolio websites for Bangalore designers. Would you like to see a demo tailored for your studio?',
+      'Hello,\n\nI saw Dream Space -TY, Design Studio on Google Maps and appreciated your modern residential project photos.\n\nI build clean, rapid-loading portfolio websites for Bangalore designers. Would you like to see a demo tailored for your studio?',
   },
   {
     id: 'demo_lead_6',
@@ -137,7 +137,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across Krishh Interior DeSign Studio on Google with 4.8★ and 78 reviews!\n\nA custom website linking directly to your WhatsApp would make converting tech-park clients even easier. May I send you a quick demo concept? 🙂',
+      'Hello,\n\nI came across Krishh Interior DeSign Studio on Google with 4.8 rating and 78 reviews.\n\nA custom website linking directly to your WhatsApp would make converting tech-park clients even easier. May I send you a quick demo concept?',
   },
   {
     id: 'demo_lead_7',
@@ -159,7 +159,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across Bheema Modular Kitchen on Google and checked out your kitchen work in Banashankari.\n\nI build fast website catalogs for modular kitchen specialists. Would you like to check out a quick demo?',
+      'Hello,\n\nI came across Bheema Modular Kitchen on Google and checked out your kitchen work in Banashankari.\n\nI build fast website catalogs for modular kitchen specialists. Would you like to check out a quick demo?',
   },
   {
     id: 'demo_lead_8',
@@ -181,7 +181,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across NILAYAA INTERIORS on Google and noticed your 4.7★ reputation with 62 reviews.\n\nI am a web developer specializing in design studio portfolios. Would you like to see a quick concept demo for NILAYAA INTERIORS? 🙂',
+      'Hello,\n\nI came across NILAYAA INTERIORS on Google and noticed your 4.7 reputation with 62 reviews.\n\nI am a web developer specializing in design studio portfolios. Would you like to see a quick concept demo for NILAYAA INTERIORS?',
   },
   {
     id: 'demo_lead_9',
@@ -203,7 +203,7 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across Prakash Interior Decors on Google and had a look at your interior work in Jayanagar.\n\nWould you be interested in seeing a quick website demo for your business?',
+      'Hello,\n\nI came across Prakash Interior Decors on Google and had a look at your interior work in Jayanagar.\n\nWould you be interested in seeing a quick website demo for your business?',
   },
   {
     id: 'demo_lead_10',
@@ -225,6 +225,6 @@ export const DEMO_LEADS: Lead[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     personalizedMessage:
-      'Hi! 👋\n\nI came across ELEGANCE INTERIO on Google and noticed your great work in Koramangala.\n\nI build tailored websites for interior designers. May I share a quick sample demo with you? 🙂',
+      'Hello,\n\nI came across ELEGANCE INTERIO on Google and noticed your work in Koramangala.\n\nI build tailored websites for interior designers. May I share a quick sample demo with you?',
   },
 ];

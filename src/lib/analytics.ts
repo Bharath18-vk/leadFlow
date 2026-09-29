@@ -124,7 +124,7 @@ export function getFunnelSteps(leads: Lead[]): FunnelStep[] {
     },
     {
       stage: 'Won',
-      label: 'Deals Won 🎉',
+      label: 'Deals Won',
       count: m.won,
       percentageOfTotal: safePercentage(m.won, m.total),
       conversionFromPrev: safePercentage(m.won, m.demoSent),

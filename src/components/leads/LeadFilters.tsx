@@ -108,8 +108,8 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">All Dates</option>
-            <option value="due_today">⏰ Due Today</option>
-            <option value="overdue">🔥 Overdue</option>
+            <option value="due_today">Due Today</option>
+            <option value="overdue">Overdue</option>
             <option value="has_followup">Has Date</option>
             <option value="no_followup">No Date</option>
           </select>
@@ -126,7 +126,7 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">All Contact</option>
-            <option value="contacted">✓ Contacted</option>
+            <option value="contacted">Contacted</option>
             <option value="uncontacted">Uncontacted</option>
           </select>
         </div>
@@ -158,9 +158,9 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="all">All Tiers</option>
-            <option value="A">🔥 A — Hot</option>
-            <option value="B">🟢 B — Good</option>
-            <option value="C">🟡 C — Low Priority</option>
+            <option value="A">Tier A: Priority</option>
+            <option value="B">Tier B: Qualified</option>
+            <option value="C">Tier C: Standard</option>
           </select>
         </div>
 
@@ -191,10 +191,10 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value={0}>Any Rating</option>
-            <option value={4.8}>⭐ 4.8 & Above</option>
-            <option value={4.5}>⭐ 4.5 & Above</option>
-            <option value={4.0}>⭐ 4.0 & Above</option>
-            <option value={3.5}>⭐ 3.5 & Above</option>
+            <option value={4.8}>4.8 and Above</option>
+            <option value={4.5}>4.5 and Above</option>
+            <option value={4.0}>4.0 and Above</option>
+            <option value={3.5}>3.5 and Above</option>
           </select>
         </div>
 

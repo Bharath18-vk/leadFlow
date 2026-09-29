@@ -10,6 +10,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { TemplatesPage } from './pages/TemplatesPage';
 import { ImportModal } from './components/import/ImportModal';
 import { ImportSummaryDialog } from './components/import/ImportSummaryDialog';
+import { LegalModal, type LegalDocType } from './components/legal/LegalModal';
 import { storage } from './lib/storage';
 import type { Lead, LeadFilterState, LeadStatus, DashboardStats, ImportSummary } from './types/lead';
 import { DEMO_LEADS } from './data/demoLeads';
@@ -56,7 +57,14 @@ export function App() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalDocType, setLegalDocType] = useState<LegalDocType>('privacy');
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
+
+  const handleOpenLegal = (doc: LegalDocType) => {
+    setLegalDocType(doc);
+    setLegalModalOpen(true);
+  };
 
   // Settings & Templates
   const [dailyGoal, setDailyGoal] = useState<number>(20);
@@ -278,7 +286,7 @@ export function App() {
       if (selectedLead?.id === leadId) {
         setSelectedLead(updated);
       }
-      showToast(`${updated.businessName} marked as Contacted (Attempt #${updates.contactAttempts}) ✓`, 'success');
+      showToast(`${updated.businessName} marked as Contacted (Attempt #${updates.contactAttempts})`, 'success');
     }
   };
 
@@ -325,7 +333,7 @@ export function App() {
   // Open Next Lead (Primary Workflow)
   const handleOpenNextLead = useCallback(() => {
     if (eligibleQueueLeads.length === 0) {
-      showToast('All eligible leads in queue contacted! 🎉', 'info');
+      showToast('All eligible leads in queue contacted', 'info');
       return;
     }
 
@@ -531,6 +539,7 @@ export function App() {
           queueCount={eligibleQueueLeads.length}
           followUpsCount={stats.overdueFollowUpsCount + stats.todayFollowUpsCount}
           templatesCount={templatesCount}
+          onOpenLegal={handleOpenLegal}
         />
       </div>
 
@@ -538,10 +547,10 @@ export function App() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs"
+            className="fixed inset-0 bg-zinc-950/70"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="relative z-10 w-64 bg-white dark:bg-slate-900 shadow-xl">
+          <div className="relative z-10 w-64 bg-white dark:bg-zinc-900 shadow-xl">
             <Sidebar
               currentTab={currentTab}
               onSelectTab={(tab) => {
@@ -552,6 +561,7 @@ export function App() {
               queueCount={eligibleQueueLeads.length}
               followUpsCount={stats.overdueFollowUpsCount + stats.todayFollowUpsCount}
               templatesCount={templatesCount}
+              onOpenLegal={handleOpenLegal}
             />
           </div>
         </div>
@@ -664,11 +674,12 @@ export function App() {
               onUpdateDailyGoal={(g) => {
                 setDailyGoal(g);
                 storage.saveSettings({ dailyOutreachGoal: g });
-                showToast('Daily goal saved!', 'success');
+                showToast('Daily goal saved', 'success');
               }}
               onClearAllData={handleClearAllData}
               onRestoreLeads={handleRestoreLeads}
               onSelectLead={(lead) => setSelectedLead(lead)}
+              onOpenLegal={handleOpenLegal}
             />
           )}
         </main>
@@ -679,23 +690,23 @@ export function App() {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-xl shadow-lg border text-xs font-semibold animate-in slide-in-from-bottom-2 duration-150 ${
+            className={`pointer-events-auto flex items-center gap-2.5 px-3.5 py-2 rounded-md shadow-lg border text-xs font-medium animate-in slide-in-from-bottom-2 duration-150 ${
               toast.type === 'success'
-                ? 'bg-emerald-600 text-white border-emerald-700'
+                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-zinc-800 dark:border-zinc-200'
                 : toast.type === 'error'
-                ? 'bg-rose-600 text-white border-rose-700'
-                : 'bg-slate-900 text-white border-slate-800'
+                ? 'bg-rose-900 text-rose-100 border-rose-800'
+                : 'bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 border-zinc-800 dark:border-zinc-700'
             }`}
           >
-            {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-200" />}
-            {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-200" />}
-            {toast.type === 'info' && <Info className="w-4 h-4 text-blue-200" />}
+            {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 dark:text-emerald-600" strokeWidth={1.5} />}
+            {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-400" strokeWidth={1.5} />}
+            {toast.type === 'info' && <Info className="w-4 h-4 text-zinc-400" strokeWidth={1.5} />}
             <span>{toast.message}</span>
             <button
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-              className="ml-2 text-white/70 hover:text-white"
+              className="ml-2 opacity-70 hover:opacity-100"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-3.5 h-3.5" strokeWidth={1.5} />
             </button>
           </div>
         ))}
@@ -717,6 +728,13 @@ export function App() {
           setImportSummary(null);
           setCurrentTab('leads');
         }}
+      />
+
+      {/* Legal & Compliance Modal (Items 26 and 27) */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        initialDoc={legalDocType}
       />
     </div>
   );

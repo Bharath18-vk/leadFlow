@@ -39,7 +39,7 @@ export function createBackup(leads: Lead[]): LeadFlowBackup {
     metadata: {
       totalLeads: leads.length,
       wonRevenue,
-      appName: 'LeadFlow — WhatsApp Outreach CRM',
+      appName: 'LeadFlow - WhatsApp Outreach CRM',
     },
   };
 }

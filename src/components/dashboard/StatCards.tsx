@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   Users,
-  Sparkles,
   Send,
   MessageCircle,
   Eye,
-  ThumbsUp,
+  CheckCircle,
   Clock,
-  Trophy,
+  Briefcase,
   XCircle,
+  Layers,
 } from 'lucide-react';
 import type { DashboardStats } from '../../types/lead';
 
@@ -19,95 +19,80 @@ interface StatCardsProps {
 export const StatCards: React.FC<StatCardsProps> = ({ stats }) => {
   const cards = [
     {
-      title: 'Total Leads',
+      title: 'Total',
       value: stats.totalLeads,
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-100',
     },
     {
       title: 'New',
       value: stats.newLeads,
-      icon: Sparkles,
-      color: 'text-cyan-600',
-      bgColor: 'bg-cyan-50',
-      borderColor: 'border-cyan-100',
+      icon: Layers,
     },
     {
       title: 'Contacted',
       value: stats.contactedLeads,
       icon: Send,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-100',
     },
     {
       title: 'Replied',
       value: stats.repliedLeads,
       icon: MessageCircle,
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50',
-      borderColor: 'border-amber-100',
     },
     {
       title: 'Demo Sent',
       value: stats.demoSentLeads,
       icon: Eye,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50',
-      borderColor: 'border-indigo-100',
     },
     {
       title: 'Interested',
       value: stats.interestedLeads,
-      icon: ThumbsUp,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-100',
+      icon: CheckCircle,
     },
     {
       title: 'Follow-up',
       value: stats.followUpLeads,
       icon: Clock,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
-      borderColor: 'border-orange-100',
     },
     {
       title: 'Won',
       value: stats.wonLeads,
-      icon: Trophy,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-100',
+      icon: Briefcase,
+      highlight: true,
     },
     {
       title: 'Lost',
       value: stats.lostLeads,
       icon: XCircle,
-      color: 'text-rose-600',
-      bgColor: 'bg-rose-50',
-      borderColor: 'border-rose-100',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9 gap-3">
+    <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2 font-sans">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.title}
-            className={`p-3.5 rounded-xl bg-white dark:bg-slate-900 border ${card.borderColor} dark:border-slate-800 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between`}
+            className={`p-3 rounded-md border transition-colors ${
+              card.highlight
+                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-zinc-900 dark:border-zinc-100'
+                : 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-800'
+            }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 truncate">{card.title}</span>
-              <div className={`p-1.5 rounded-lg ${card.bgColor} ${card.color} dark:bg-slate-800`}>
-                <Icon className="w-3.5 h-3.5" />
-              </div>
+            <div className="flex items-center justify-between gap-1 mb-1">
+              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 truncate">
+                {card.title}
+              </span>
+              <Icon
+                className={`w-3 h-3 ${
+                  card.highlight
+                    ? 'text-emerald-400 dark:text-emerald-600'
+                    : 'text-zinc-400 dark:text-zinc-500'
+                }`}
+                strokeWidth={1.5}
+              />
             </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <div className="text-lg font-bold font-mono tabular-nums leading-tight tracking-tight">
               {card.value}
             </div>
           </div>
