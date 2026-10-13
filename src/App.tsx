@@ -614,6 +614,10 @@ export function App() {
               onOpenNextLead={handleOpenNextLead}
               onSelectLead={(lead) => setSelectedLead(lead)}
               onMarkContacted={handleMarkContacted}
+              selectedLead={selectedLead}
+              onCloseLeadInspector={() => setSelectedLead(null)}
+              onUpdateLead={handleUpdateLead}
+              hasNextLead={eligibleQueueLeads.length > 0}
             />
           )}
 
@@ -678,7 +682,10 @@ export function App() {
               }}
               onClearAllData={handleClearAllData}
               onRestoreLeads={handleRestoreLeads}
-              onSelectLead={(lead) => setSelectedLead(lead)}
+              onSelectLead={(lead) => {
+                setSelectedLead(lead);
+                setCurrentTab('leads');
+              }}
               onOpenLegal={handleOpenLegal}
             />
           )}

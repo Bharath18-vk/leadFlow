@@ -14,14 +14,19 @@ import { Button } from '../components/ui/Button';
 import { formatNumber, formatPhoneNumber } from '../lib/utils';
 import { normalizePhoneForWhatsApp, openWhatsAppChat } from '../lib/whatsapp';
 import { AutoBatchRunner } from '../components/outreach/AutoBatchRunner';
+import { LeadDetailPanel } from '../components/leads/LeadDetailPanel';
 
 interface OutreachQueuePageProps {
   leads: Lead[];
   stats: DashboardStats;
   dailyGoal: number;
   onOpenNextLead: () => void;
-  onSelectLead: (lead: Lead) => void;
+  onSelectLead: (lead: Lead | null) => void;
   onMarkContacted: (leadId: string) => void;
+  selectedLead?: Lead | null;
+  onCloseLeadInspector?: () => void;
+  onUpdateLead?: (leadId: string, updates: Partial<Lead>) => void;
+  hasNextLead?: boolean;
 }
 
 export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
@@ -31,6 +36,10 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
   onOpenNextLead,
   onSelectLead,
   onMarkContacted,
+  selectedLead,
+  onCloseLeadInspector,
+  onUpdateLead,
+  hasNextLead,
 }) => {
   // Eligible leads: status = 'New' AND valid phone, sorted by leadScore desc
   const eligibleQueue = useMemo(() => {
@@ -168,7 +177,7 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 {eligibleQueue.map((lead, index) => {
-                  const isActive = lead.id === activeLeadId;
+                  const isActive = lead.id === activeLeadId || lead.id === selectedLead?.id;
                   return (
                     <tr
                       key={lead.id}
@@ -277,6 +286,16 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
           </div>
         )}
       </div>
+
+      {/* Slide-out Lead Detail Panel Drawer */}
+      <LeadDetailPanel
+        lead={selectedLead || null}
+        onClose={onCloseLeadInspector || (() => onSelectLead(null))}
+        onUpdateLead={onUpdateLead || (() => {})}
+        onMarkContacted={onMarkContacted}
+        onNextLead={onOpenNextLead}
+        hasNextLead={hasNextLead ?? eligibleQueue.length > 0}
+      />
     </div>
   );
 };

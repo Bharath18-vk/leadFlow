@@ -33,22 +33,22 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
     filters.category !== 'all';
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-xs space-y-3.5 transition-colors">
+    <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 shadow-xs space-y-3.5 transition-colors">
       {/* Search and Top Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={filters.search}
             onChange={(e) => onChange({ search: e.target.value, page: 1 })}
             placeholder="Search by business name, phone number, category, or city..."
-            className="w-full pl-10 pr-9 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50/50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-800 transition-all placeholder:text-slate-400 text-slate-900 dark:text-slate-100"
+            className="w-full pl-10 pr-9 py-2 rounded-md border border-zinc-300 dark:border-zinc-700 text-xs focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 bg-zinc-50/60 dark:bg-zinc-800/80 hover:bg-white dark:hover:bg-zinc-800 transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-500 text-zinc-900 dark:text-zinc-100"
           />
           {filters.search && (
             <button
               onClick={() => onChange({ search: '', page: 1 })}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
             >
               <X className="w-4 h-4" />
             </button>
@@ -56,13 +56,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs font-semibold px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg">
+          <span className="text-xs font-semibold px-2.5 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-md font-mono tabular-nums">
             {totalMatches} matching leads
           </span>
           {hasActiveFilters && (
             <button
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-md transition-colors active:scale-[0.98]"
             >
               <RotateCcw className="w-3 h-3" />
               Reset
@@ -75,13 +75,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-10 gap-2 pt-1">
         {/* Status Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Status
           </label>
           <select
             value={filters.status}
             onChange={(e) => onChange({ status: e.target.value, page: 1 })}
-            className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="New">New</option>
@@ -99,13 +99,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Follow-up Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Follow-up
           </label>
           <select
             value={filters.followUpFilter || 'all'}
             onChange={(e) => onChange({ followUpFilter: e.target.value as FollowUpFilter, page: 1 })}
-            className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Dates</option>
             <option value="due_today">Due Today</option>
@@ -117,13 +117,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Contact Status Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Contacted?
           </label>
           <select
             value={filters.contactFilter || 'all'}
             onChange={(e) => onChange({ contactFilter: e.target.value as ContactFilter, page: 1 })}
-            className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Contact</option>
             <option value="contacted">Contacted</option>
@@ -133,13 +133,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Notes Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Notes
           </label>
           <select
             value={filters.notesFilter || 'all'}
             onChange={(e) => onChange({ notesFilter: e.target.value as NotesFilter, page: 1 })}
-            className="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Notes</option>
             <option value="has_notes">Has Notes</option>
@@ -149,13 +149,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Tier Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Lead Tier
           </label>
           <select
             value={filters.tier}
             onChange={(e) => onChange({ tier: e.target.value, page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Tiers</option>
             <option value="A">Tier A: Priority</option>
@@ -166,13 +166,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Phone Availability Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Phone
           </label>
           <select
             value={filters.phoneFilter}
             onChange={(e) => onChange({ phoneFilter: e.target.value as PhoneFilter, page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value="all">All Phone</option>
             <option value="has_phone">Phone Available</option>
@@ -182,13 +182,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Min Rating Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Min Rating
           </label>
           <select
             value={filters.minRating}
             onChange={(e) => onChange({ minRating: parseFloat(e.target.value), page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value={0}>Any Rating</option>
             <option value={4.8}>4.8 and Above</option>
@@ -200,13 +200,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Min Reviews Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Min Reviews
           </label>
           <select
             value={filters.minReviews}
             onChange={(e) => onChange({ minReviews: parseInt(e.target.value, 10), page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
           >
             <option value={0}>Any Reviews</option>
             <option value={10}>10+ Reviews</option>
@@ -218,13 +218,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* Category Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             Category
           </label>
           <select
             value={filters.category}
             onChange={(e) => onChange({ category: e.target.value, page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none truncate"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none truncate cursor-pointer"
           >
             <option value="all">All Categories</option>
             {uniqueCategories.map((cat) => (
@@ -237,13 +237,13 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
 
         {/* City Filter */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
             City
           </label>
           <select
             value={filters.city}
             onChange={(e) => onChange({ city: e.target.value, page: 1 })}
-            className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none truncate"
+            className="w-full px-2.5 py-1.5 text-xs rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none truncate cursor-pointer"
           >
             <option value="all">All Cities</option>
             {uniqueCities.map((city) => (

@@ -121,7 +121,7 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
       <div
         key={lead.id}
         onClick={() => onSelectLead(lead)}
-        className={`p-4 rounded-xl border bg-white dark:bg-slate-900 shadow-2xs hover:shadow-md transition-all cursor-pointer space-y-3 ${cardBorder}`}
+        className={`p-4 rounded-lg border bg-white dark:bg-zinc-900 shadow-xs transition-colors cursor-pointer space-y-3 ${cardBorder}`}
       >
         <div className="flex items-start justify-between gap-2">
           <div>

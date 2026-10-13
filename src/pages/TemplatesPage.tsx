@@ -370,13 +370,13 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
 
           {/* Search bar */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
             <input
               type="text"
               placeholder="Search templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500"
             />
           </div>
 
@@ -387,10 +387,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategoryFilter(cat)}
-                className={`px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${
+                className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition-colors active:scale-[0.98] ${
                   activeCategoryFilter === cat
-                    ? 'bg-slate-900 dark:bg-blue-600 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                 }`}
               >
                 {cat === 'all' ? 'All' : CATEGORY_LABELS[cat]}
@@ -401,7 +401,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
           {/* Templates Cards List */}
           <div className="space-y-2.5 max-h-[600px] overflow-y-auto pr-0.5">
             {filteredTemplates.length === 0 ? (
-              <div className="text-center py-8 text-xs text-slate-400 dark:text-slate-500">
+              <div className="text-center py-8 text-xs text-zinc-400 dark:text-zinc-500">
                 No templates found matching your search.
               </div>
             ) : (
@@ -411,12 +411,11 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   <div
                     key={t.id}
                     onClick={() => setSelectedTemplateId(t.id)}
-                    className={`group relative p-3 rounded-xl border cursor-pointer transition-all ${
+                    className={`group relative p-3 rounded-lg border cursor-pointer transition-colors ${
                       isSelected
-                        ? 'border-blue-500 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 shadow-xs ring-1 ring-blue-500'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                        ? 'border-zinc-900 dark:border-zinc-100 bg-zinc-50 dark:bg-zinc-800/80 shadow-xs ring-1 ring-zinc-900 dark:ring-zinc-100'
+                        : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700'
                     }`}
-
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="space-y-1">
@@ -531,13 +530,13 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setIsDirty(true);
                 }}
                 placeholder="e.g. Interior Design Direct Pitch"
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500"
               />
             </div>
 
             {/* Category Select */}
             <div>
-              <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+              <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 block mb-1">
                 Category
               </label>
               <select
@@ -546,7 +545,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setEditingCategory(e.target.value as TemplateCategory);
                   setIsDirty(true);
                 }}
-                className="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer"
               >
                 <option value="discovery">Cold Discovery</option>
                 <option value="social_proof">Social Proof & Reviews</option>
@@ -559,7 +558,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
             {/* Variable Insertion Pills */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
                   Insert Dynamic Variables (Click to Add)
                 </label>
               </div>
@@ -569,7 +568,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                     key={v.key}
                     type="button"
                     onClick={() => handleInsertVariable(v.key)}
-                    className="text-[10px] px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors font-mono"
+                    className="text-[10px] px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 border border-zinc-200 dark:border-zinc-700 transition-colors font-mono active:scale-[0.98]"
                     title={`Inserts ${v.key} (${v.description})`}
                   >
                     + {v.label}
@@ -580,7 +579,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
 
             {/* Message Textarea */}
             <div>
-              <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+              <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 block mb-1">
                 Message Body
               </label>
               <textarea
@@ -592,11 +591,11 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setIsDirty(true);
                 }}
                 placeholder="Write your template copy here... Use {{business_name}} and {{city}} to personalize."
-                className="w-full p-3 text-xs leading-relaxed font-mono bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
+                className="w-full p-3 text-xs leading-relaxed font-mono bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:bg-white dark:focus:bg-zinc-800 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
               />
-              <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-slate-500 mt-1 px-1">
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 px-1 font-mono">
                 <span>{editingContent.length} chars • {editingContent.split(/\s+/).filter(Boolean).length} words</span>
-                <span>Supports WhatsApp formatting (*bold*, _italic_)</span>
+                <span className="font-sans">Supports WhatsApp formatting (*bold*, _italic_)</span>
               </div>
             </div>
 

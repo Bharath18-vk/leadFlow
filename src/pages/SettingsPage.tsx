@@ -146,10 +146,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <button
             type="button"
             onClick={() => setTheme('light')}
-            className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all ${
+            className={`p-3.5 rounded-md border flex flex-col items-center gap-2 transition-all active:scale-[0.98] ${
               theme === 'light'
-                ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950 font-bold'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <Sun className="w-5 h-5 text-amber-500" />
@@ -159,10 +159,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <button
             type="button"
             onClick={() => setTheme('dark')}
-            className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all ${
+            className={`p-3.5 rounded-md border flex flex-col items-center gap-2 transition-all active:scale-[0.98] ${
               theme === 'dark'
-                ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950 font-bold'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <Moon className="w-5 h-5 text-indigo-400" />
@@ -172,13 +172,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <button
             type="button"
             onClick={() => setTheme('system')}
-            className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all ${
+            className={`p-3.5 rounded-md border flex flex-col items-center gap-2 transition-all active:scale-[0.98] ${
               theme === 'system'
-                ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950 font-bold'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
-            <Monitor className="w-5 h-5 text-slate-500" />
+            <Monitor className="w-5 h-5 text-zinc-500" />
             <span className="text-xs">System Match</span>
           </button>
         </div>
@@ -237,14 +237,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 3: WhatsApp Launch & Tab Behavior */}
-      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-[#25D366]">
+          <div className="p-2.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-[#25D366]">
             <MessageSquare className="w-5 h-5 fill-current" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">WhatsApp Launch & Tab Preferences</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">WhatsApp Launch & Tab Preferences</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               Control how WhatsApp opens to eliminate multi-tab clutter and loading delays
             </p>
           </div>
@@ -254,24 +254,24 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           {/* Option 1: Web Reused Tab */}
           <div
             onClick={() => handleWhatsAppModeChange('web_reuse')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+            className={`p-3.5 rounded-md border cursor-pointer transition-all flex flex-col justify-between ${
               whatsAppMode === 'web_reuse'
-                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-1 ring-emerald-500/20'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/40 dark:bg-zinc-800/40 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100">WhatsApp Web (Reused Tab)</span>
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">WhatsApp Web (Reused Tab)</span>
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
                   Recommended
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Uses direct <code className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-1 py-0.5 rounded font-mono">web.whatsapp.com</code> URL and navigates the <strong>same single browser tab</strong> on each click. Skips redirect hops and prevents 20 tabs from piling up.
               </p>
             </div>
-            <div className="pt-3 mt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center gap-2">
+            <div className="pt-3 mt-2 border-t border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
               <input
                 type="radio"
                 name="whatsapp_mode"
@@ -279,31 +279,31 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={() => handleWhatsAppModeChange('web_reuse')}
                 className="text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Active (Single Tab)</span>
+              <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Active (Single Tab)</span>
             </div>
           </div>
 
           {/* Option 2: WhatsApp Desktop */}
           <div
             onClick={() => handleWhatsAppModeChange('desktop')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+            className={`p-3.5 rounded-md border cursor-pointer transition-all flex flex-col justify-between ${
               whatsAppMode === 'desktop'
-                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-1 ring-emerald-500/20'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/40 dark:bg-zinc-800/40 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100">WhatsApp Desktop App</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300">
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">WhatsApp Desktop App</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200">
                   Fastest (Instant)
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                Directly triggers <code className="text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-1 py-0.5 rounded font-mono">whatsapp://</code> protocol. Opens or focuses the Windows desktop app in &lt;1 second with <strong>zero web loading or browser tabs</strong>.
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                Directly triggers <code className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-1 py-0.5 rounded font-mono">whatsapp://</code> protocol. Opens or focuses the Windows desktop app in &lt;1 second with <strong>zero web loading or browser tabs</strong>.
               </p>
             </div>
-            <div className="pt-3 mt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center gap-2">
+            <div className="pt-3 mt-2 border-t border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
               <input
                 type="radio"
                 name="whatsapp_mode"
@@ -311,31 +311,31 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={() => handleWhatsAppModeChange('desktop')}
                 className="text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Desktop Protocol</span>
+              <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Desktop Protocol</span>
             </div>
           </div>
 
           {/* Option 3: Separate New Tab */}
           <div
             onClick={() => handleWhatsAppModeChange('web_new_tab')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+            className={`p-3.5 rounded-md border cursor-pointer transition-all flex flex-col justify-between ${
               whatsAppMode === 'web_new_tab'
-                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 ring-1 ring-emerald-500/20'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/40 dark:bg-zinc-800/40 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100">WhatsApp Web (New Tab)</span>
-                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">WhatsApp Web (New Tab)</span>
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
                   Classic
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                Opens a brand-new tab (<code className="text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded font-mono">_blank</code>) for every lead click. Useful if you want to keep previous chat tabs open side-by-side.
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                Opens a brand-new tab (<code className="text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded font-mono">_blank</code>) for every lead click. Useful if you want to keep previous chat tabs open side-by-side.
               </p>
             </div>
-            <div className="pt-3 mt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center gap-2">
+            <div className="pt-3 mt-2 border-t border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
               <input
                 type="radio"
                 name="whatsapp_mode"
@@ -343,21 +343,21 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={() => handleWhatsAppModeChange('web_new_tab')}
                 className="text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Multi-Tab Mode</span>
+              <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Multi-Tab Mode</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* SECTION 4: Data Backup & Restore System */}
-      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-5 shadow-xs space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
+          <div className="p-2.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
             <HardDrive className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Backup & Disaster Recovery</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Backup & Disaster Recovery</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               Export your complete CRM database or restore from a verified JSON backup file
             </p>
           </div>
@@ -365,7 +365,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
         {/* Restore Error Banner */}
         {restoreError && (
-          <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+          <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-md text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{restoreError}</span>
           </div>
@@ -373,13 +373,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           {/* Export JSON Backup */}
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3 flex flex-col justify-between">
+          <div className="p-4 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/40 space-y-3 flex flex-col justify-between">
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-bold text-xs">
+              <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xs">
                 <FileJson className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Full JSON Backup</span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Exports all {leads.length} leads with notes, follow-up dates, quoted amounts, deal values, and timestamps.
               </p>
             </div>
@@ -396,13 +396,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </div>
 
           {/* Restore JSON Backup */}
-          <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-3 flex flex-col justify-between">
+          <div className="p-4 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/40 space-y-3 flex flex-col justify-between">
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-bold text-xs">
-                <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xs">
+                <Upload className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
                 <span>Restore from JSON</span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Restore previously exported LeadFlow data. Requires explicit confirmation before overwriting.
               </p>
             </div>
@@ -446,15 +446,15 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 5: Data Integrity Scanner */}
-      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-5 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className={`p-2 rounded-xl ${integrityReport.warningsCount > 0 ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400' : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400'}`}>
+            <div className={`p-2 rounded-md ${integrityReport.warningsCount > 0 ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400' : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400'}`}>
               <CheckCircle2 className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Data Integrity & Diagnostics</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Scan for missing deal values, malformed dates, or reachability anomalies</p>
+              <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Data Integrity & Diagnostics</h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Scan for missing deal values, malformed dates, or reachability anomalies</p>
             </div>
           </div>
 
@@ -469,18 +469,18 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+        <div className="grid grid-cols-3 gap-3 bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-md border border-zinc-200 dark:border-zinc-700 text-xs font-mono">
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Total Scanned</span>
-            <span className="text-sm font-bold text-slate-900 dark:text-slate-100">{integrityReport.totalLeads} leads</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block font-sans">Total Scanned</span>
+            <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">{integrityReport.totalLeads} leads</span>
           </div>
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Healthy Records</span>
-            <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">{integrityReport.healthyCount}</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block font-sans">Healthy Records</span>
+            <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">{integrityReport.healthyCount}</span>
           </div>
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Issues Flagged</span>
-            <span className={`text-sm font-bold ${integrityReport.issuesCount > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300'}`}>
+            <span className="text-zinc-500 dark:text-zinc-400 block font-sans">Issues Flagged</span>
+            <span className={`text-sm font-bold tabular-nums ${integrityReport.issuesCount > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-zinc-700 dark:text-zinc-300'}`}>
               {integrityReport.issuesCount}
             </span>
           </div>
@@ -490,27 +490,27 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <div className="pt-2">
             <button
               onClick={() => setShowIntegrityDetails(!showIntegrityDetails)}
-              className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 inline-flex items-center gap-1"
+              className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white inline-flex items-center gap-1 active:scale-[0.98]"
             >
-              <span>{showIntegrityDetails ? 'Hide Diagnostics' : `View ${integrityReport.issues.length} Flagged Details →`}</span>
+              <span>{showIntegrityDetails ? 'Hide Diagnostics' : `View ${integrityReport.issues.length} Flagged Details ->`}</span>
             </button>
 
             {showIntegrityDetails && (
-              <div className="mt-3 space-y-2 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-2 bg-slate-50/50 dark:bg-slate-800/40">
+              <div className="mt-3 space-y-2 max-h-60 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-md p-2 bg-zinc-50/50 dark:bg-zinc-800/40">
                 {integrityReport.issues.map((issue, idx) => {
                   const targetLead = leads.find((l) => l.id === issue.leadId);
                   return (
                     <div key={idx} className="py-2 px-2 flex items-start justify-between gap-3 text-xs">
                       <div>
-                        <span className="font-semibold text-slate-900 dark:text-slate-100">{issue.businessName}</span>
-                        <span className="text-slate-400 dark:text-slate-500 text-[10px] ml-2">({issue.field})</span>
-                        <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{issue.message}</p>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 italic mt-0.5">Tip: {issue.suggestion}</p>
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-100">{issue.businessName}</span>
+                        <span className="text-zinc-400 dark:text-zinc-500 text-[10px] ml-2 font-mono">({issue.field})</span>
+                        <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-0.5">{issue.message}</p>
+                        <p className="text-[10px] text-zinc-500 dark:text-zinc-400 italic mt-0.5">Tip: {issue.suggestion}</p>
                       </div>
                       {targetLead && onSelectLead && (
                         <button
                           onClick={() => onSelectLead(targetLead)}
-                          className="shrink-0 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 p-1 flex items-center gap-1"
+                          className="shrink-0 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white p-1 flex items-center gap-1 active:scale-[0.98]"
                           title="Inspect Lead"
                         >
                           <Eye className="w-3.5 h-3.5" />
@@ -527,33 +527,33 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       </div>
 
       {/* SECTION 6: System Information */}
-      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-5 shadow-xs space-y-3">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400">
+          <div className="p-2.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
             <Database className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Application & Storage Specs</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">100% private, sandboxed inside your local browser profile</p>
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Application & Storage Specs</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">100% private, sandboxed inside your local browser profile</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-md border border-zinc-200 dark:border-zinc-700 text-xs">
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Version</span>
-            <span className="font-mono font-bold text-slate-900 dark:text-slate-100">v1.0.0</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block">Version</span>
+            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">v1.0.0</span>
           </div>
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Data Schema</span>
-            <span className="font-mono font-bold text-slate-900 dark:text-slate-100">v{dataVersion}</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block">Data Schema</span>
+            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">v{dataVersion}</span>
           </div>
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Stored Records</span>
-            <span className="font-mono font-bold text-slate-900 dark:text-slate-100">{leads.length}</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block">Stored Records</span>
+            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">{leads.length}</span>
           </div>
           <div>
-            <span className="text-slate-500 dark:text-slate-400 block">Storage Used</span>
-            <span className="font-mono font-bold text-slate-900 dark:text-slate-100">{storageKb} KB</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block">Storage Used</span>
+            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">{storageKb} KB</span>
           </div>
         </div>
       </div>
