@@ -50,17 +50,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   if (leads.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto py-16 px-6 text-center space-y-10 animate-in fade-in duration-300 font-sans">
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 backdrop-blur-sm">
+      <div className="max-w-4xl mx-auto py-12 px-6 text-center space-y-10 animate-fade-in font-sans">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Local-First Intelligence Engine</span>
+            <span>Local Browser Sandbox · Zero Cloud Telemetry</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
             LeadFlow Sales Console
           </h1>
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto leading-relaxed">
-            Ingest spreadsheet leads from Google Maps or scrapers into an organized, local-first outreach console with intelligent ranking and safe auto-batching.
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto leading-relaxed">
+            Organize spreadsheet prospects from scrapers or Google Maps, prioritize high-reputation accounts, and dispatch personalized WhatsApp messages at safe human intervals.
           </p>
         </div>
 
@@ -68,42 +68,61 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <Button
             size="lg"
             variant="primary"
-            onClick={onOpenImport}
-            icon={<UploadCloud className="w-4 h-4" strokeWidth={1.5} />}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/25 px-6 py-3"
+            onClick={onLoadDemo}
+            icon={<Layers className="w-4 h-4" strokeWidth={1.5} />}
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/20 px-6 py-2.5 text-xs font-semibold cursor-pointer"
           >
-            Import Excel or CSV
+            Load 10 Bangalore Sample Leads
           </Button>
           <Button
             size="lg"
             variant="outline"
-            onClick={onLoadDemo}
-            icon={<Layers className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />}
-            className="px-6 py-3"
+            onClick={onOpenImport}
+            icon={<UploadCloud className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />}
+            className="w-full sm:w-auto px-6 py-2.5 text-xs font-medium cursor-pointer"
           >
-            Load Sample Dataset
+            Import Custom Excel or CSV
           </Button>
         </div>
 
-        {/* Asymmetrical Architectural Onboarding Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pt-4 text-left">
-          <div className="md:col-span-7 p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm space-y-2.5 transition-all hover:-translate-y-0.5">
-            <span className="text-[10px] font-mono uppercase text-zinc-400 font-semibold tracking-widest">
-              Data Pipeline
-            </span>
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Spreadsheet Ingestion & Merge</h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Upload .xlsx or .csv prospect workbooks. Re-imports preserve your notes, contact counts, deal values, and custom message revisions losslessly.
+        {/* 3-Step Guided Workflow Board */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-left">
+          <div className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-bold tracking-widest">
+                Step 01
+              </span>
+              <span className="text-xs text-zinc-400 font-mono">Input</span>
+            </div>
+            <h2 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Spreadsheet Ingestion</h2>
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              Auto-parses business names, phones, Google ratings, and review counts with automatic deduplication.
             </p>
           </div>
 
-          <div className="md:col-span-5 p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/80 dark:bg-zinc-900/60 backdrop-blur-sm space-y-2.5 transition-all hover:-translate-y-0.5">
-            <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-semibold tracking-widest">
-              Privacy Architecture
-            </span>
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Zero External Telemetry</h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Your prospects, phone numbers, and communications remain strictly within your browser sandbox. No third-party data tracking.
+          <div className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-bold tracking-widest">
+                Step 02
+              </span>
+              <span className="text-xs text-zinc-400 font-mono">Intelligence</span>
+            </div>
+            <h2 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Reputation Ranking</h2>
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              Scores prospects 0–100 into Tier A, B, and C pools so you always contact your highest-yield prospects first.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-bold tracking-widest">
+                Step 03
+              </span>
+              <span className="text-xs text-zinc-400 font-mono">Execution</span>
+            </div>
+            <h2 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Anti-Ban Paced Dispatch</h2>
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              Sends 1-click WhatsApp messages at randomized 25–40s human intervals to safeguard your phone number from bans.
             </p>
           </div>
         </div>
