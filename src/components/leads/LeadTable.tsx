@@ -300,10 +300,10 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                         <select
                           value={lead.status}
                           onChange={(e) => onStatusChange(lead.id, e.target.value as LeadStatus)}
-                          className="appearance-none text-xs font-medium py-1 pl-2.5 pr-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-600 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer transition-colors"
+                          className="appearance-none text-xs font-medium py-1 pl-2.5 pr-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:border-zinc-300 dark:hover:border-zinc-600 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer transition-colors"
                         >
                           {ALL_STATUSES.map((status) => (
-                            <option key={status} value={status}>
+                            <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" key={status} value={status}>
                               {status}
                             </option>
                           ))}
@@ -340,12 +340,12 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               onChange={(e) =>
                 onFilterChange({ pageSize: parseInt(e.target.value, 10), page: 1 })
               }
-              className="appearance-none pl-2.5 pr-6 py-1 bg-white dark:bg-zinc-800 border border-zinc-250 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 rounded-md text-xs focus:ring-1 focus:ring-zinc-400 cursor-pointer"
+              className="appearance-none pl-2.5 pr-6 py-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-md text-xs focus:ring-1 focus:ring-zinc-400 cursor-pointer"
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={10}>10</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={25}>25</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={50}>50</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={100}>100</option>
             </select>
             <ChevronDown className="w-3 h-3 text-zinc-400 pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2" />
           </div>

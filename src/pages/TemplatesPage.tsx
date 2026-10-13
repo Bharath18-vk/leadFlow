@@ -561,11 +561,11 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                 }}
                 className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer"
               >
-                <option value="discovery">Cold Discovery</option>
-                <option value="social_proof">Social Proof & Reviews</option>
-                <option value="direct">Quick & Direct</option>
-                <option value="followup">Follow-up Nudge</option>
-                <option value="custom">Custom</option>
+                <option value="discovery" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Cold Discovery</option>
+                <option value="social_proof" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Social Proof & Reviews</option>
+                <option value="direct" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Quick & Direct</option>
+                <option value="followup" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Follow-up Nudge</option>
+                <option value="custom" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Custom</option>
               </select>
             </div>
 
@@ -693,9 +693,9 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
               onChange={(e) => setPreviewLeadId(e.target.value)}
               className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate cursor-pointer"
             >
-              <option value="sample">Sample Lead: Studio One Interiors (Rating: 4.8, Bangalore)</option>
+              <option value="sample" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Sample Lead: Studio One Interiors (Rating: 4.8, Bangalore)</option>
               {leads.map((l) => (
-                <option key={l.id} value={l.id}>
+                <option key={l.id} value={l.id} className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   {l.businessName} {l.city ? `(${l.city})` : ''} - {l.rating ? `★ ${l.rating}` : 'No rating'}
                 </option>
               ))}

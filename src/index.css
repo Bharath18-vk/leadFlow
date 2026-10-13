@@ -31,6 +31,27 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
     letter-spacing: -0.011em;
   }
+
+  /* Universal high-contrast dropdown styling for native OS select popups */
+  select {
+    color-scheme: light;
+  }
+
+  .dark select,
+  :is(.dark) select {
+    color-scheme: dark;
+  }
+
+  select option {
+    background-color: #ffffff;
+    color: #18181b;
+  }
+
+  .dark select option,
+  :is(.dark) select option {
+    background-color: #18181b;
+    color: #f4f4f5;
+  }
 }
 
 /* Custom scrollbar */

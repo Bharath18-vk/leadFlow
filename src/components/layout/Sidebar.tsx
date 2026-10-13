@@ -108,8 +108,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div className="h-14 flex items-center px-4 border-b border-zinc-200 dark:border-zinc-800/80">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-emerald-600 dark:bg-emerald-500 flex items-center justify-center p-1.5 shrink-0 shadow-md shadow-emerald-600/25">
-            <LeadFlowLogo className="w-full h-full text-white" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-600 dark:bg-emerald-500 flex items-center justify-center p-1.5 shrink-0 shadow-md shadow-emerald-600/25">
+            <LeadFlowLogo className="w-5 h-5 text-white" />
           </div>
           <div>
             <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm tracking-tight block leading-tight">

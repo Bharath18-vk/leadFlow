@@ -414,16 +414,16 @@ export const LeadDetailPanel: React.FC<LeadDetailPanelProps> = ({
                   aria-label="Change lead status"
                   className="text-xs px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-2xs cursor-pointer"
                 >
-                  <option value="New">New</option>
-                  <option value="Contacted">Contacted</option>
-                  <option value="Replied">Replied</option>
-                  <option value="Interested">Interested</option>
-                  <option value="Demo Sent">Demo Sent</option>
-                  <option value="Follow-up">Follow-up</option>
-                  <option value="Negotiating">Negotiating</option>
-                  <option value="Won">Won</option>
-                  <option value="Lost">Lost</option>
-                  <option value="Not Interested">Not Interested</option>
+                  <option value="New" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">New</option>
+                  <option value="Contacted" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Contacted</option>
+                  <option value="Replied" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Replied</option>
+                  <option value="Interested" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Interested</option>
+                  <option value="Demo Sent" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Demo Sent</option>
+                  <option value="Follow-up" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Follow-up</option>
+                  <option value="Negotiating" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Negotiating</option>
+                  <option value="Won" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Won</option>
+                  <option value="Lost" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Lost</option>
+                  <option value="Not Interested" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Not Interested</option>
                 </select>
               </div>
 
@@ -666,9 +666,9 @@ export const LeadDetailPanel: React.FC<LeadDetailPanelProps> = ({
                 onChange={(e) => handleApplyTemplate(e.target.value)}
                 className="flex-1 text-xs py-1 px-2.5 rounded-md border border-zinc-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate cursor-pointer shadow-2xs"
               >
-                <option value="">Choose a template to apply...</option>
+                <option value="" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Choose a template to apply...</option>
                 {templates.map((t) => (
-                  <option key={t.id} value={t.id}>
+                  <option key={t.id} value={t.id} className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                     {t.name} {t.isDefault ? '(Default)' : ''}
                   </option>
                 ))}

@@ -158,10 +158,10 @@ export const LeadCardList: React.FC<LeadCardListProps> = ({
                   <select
                     value={lead.status}
                     onChange={(e) => onStatusChange(lead.id, e.target.value as LeadStatus)}
-                    className="appearance-none text-xs font-medium py-1 pl-2 pr-5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-zinc-400 cursor-pointer shadow-2xs"
+                    className="appearance-none text-xs font-medium py-1 pl-2 pr-5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-1 focus:ring-zinc-400 cursor-pointer shadow-2xs"
                   >
                     {ALL_STATUSES.map((status) => (
-                      <option key={status} value={status}>
+                      <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" key={status} value={status}>
                         {status}
                       </option>
                     ))}

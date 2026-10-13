@@ -334,11 +334,11 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={(e) => handleCurrencyChange(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer shadow-2xs"
               >
-                <option value="INR">Indian Rupee (₹ INR)</option>
-                <option value="USD">US Dollar ($ USD)</option>
-                <option value="EUR">Euro (€ EUR)</option>
-                <option value="GBP">British Pound (£ GBP)</option>
-                <option value="AED">UAE Dirham (AED)</option>
+                <option value="INR" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Indian Rupee (₹ INR)</option>
+                <option value="USD" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">US Dollar ($ USD)</option>
+                <option value="EUR" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">Euro (€ EUR)</option>
+                <option value="GBP" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">British Pound (£ GBP)</option>
+                <option value="AED" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">UAE Dirham (AED)</option>
               </select>
               <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono">
                 Applied to deal valuations, quote records, and projected revenue

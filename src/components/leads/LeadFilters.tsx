@@ -257,23 +257,23 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             <select
               value={filters.status}
               onChange={(e) => onChange({ status: e.target.value, page: 1 })}
-              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                 filters.status !== 'all'
                   ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                  : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
               }`}
             >
-              <option value="all">All Statuses</option>
-              <option value="New">New</option>
-              <option value="Contacted">Contacted</option>
-              <option value="Replied">Replied</option>
-              <option value="Demo Sent">Demo Sent</option>
-              <option value="Interested">Interested</option>
-              <option value="Follow-up">Follow-up</option>
-              <option value="Negotiating">Negotiating</option>
-              <option value="Won">Won</option>
-              <option value="Lost">Lost</option>
-              <option value="Not Interested">Not Interested</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Statuses</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="New">New</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Contacted">Contacted</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Replied">Replied</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Demo Sent">Demo Sent</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Interested">Interested</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Follow-up">Follow-up</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Negotiating">Negotiating</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Won">Won</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Lost">Lost</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="Not Interested">Not Interested</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
@@ -288,17 +288,17 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             <select
               value={filters.followUpFilter || 'all'}
               onChange={(e) => onChange({ followUpFilter: e.target.value as FollowUpFilter, page: 1 })}
-              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                 filters.followUpFilter && filters.followUpFilter !== 'all'
                   ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                  : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
               }`}
             >
-              <option value="all">All Follow-ups</option>
-              <option value="due_today">Due Today</option>
-              <option value="overdue">Overdue</option>
-              <option value="has_followup">Has Date</option>
-              <option value="no_followup">No Date</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Follow-ups</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="due_today">Due Today</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="overdue">Overdue</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="has_followup">Has Date</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="no_followup">No Date</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
@@ -313,15 +313,15 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             <select
               value={filters.phoneFilter}
               onChange={(e) => onChange({ phoneFilter: e.target.value as PhoneFilter, page: 1 })}
-              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                 filters.phoneFilter !== 'all'
                   ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                  : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
               }`}
             >
-              <option value="all">All Leads</option>
-              <option value="has_phone">Phone Available</option>
-              <option value="no_phone">No Phone</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Leads</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="has_phone">Phone Available</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="no_phone">No Phone</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
@@ -336,15 +336,15 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             <select
               value={filters.city}
               onChange={(e) => onChange({ city: e.target.value, page: 1 })}
-              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 truncate cursor-pointer transition-all ${
+              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 truncate cursor-pointer transition-all ${
                 filters.city !== 'all'
                   ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                  : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
               }`}
             >
-              <option value="all">All Cities</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Cities</option>
               {uniqueCities.map((city) => (
-                <option key={city} value={city}>
+                <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" key={city} value={city}>
                   {city}
                 </option>
               ))}
@@ -362,15 +362,15 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             <select
               value={filters.category}
               onChange={(e) => onChange({ category: e.target.value, page: 1 })}
-              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 truncate cursor-pointer transition-all ${
+              className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 truncate cursor-pointer transition-all ${
                 filters.category !== 'all'
                   ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                  : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                  : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
               }`}
             >
-              <option value="all">All Categories</option>
+              <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Categories</option>
               {uniqueCategories.map((cat) => (
-                <option key={cat} value={cat}>
+                <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
@@ -391,15 +391,15 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 <select
                   value={filters.contactFilter || 'all'}
                   onChange={(e) => onChange({ contactFilter: e.target.value as ContactFilter, page: 1 })}
-                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                     filters.contactFilter && filters.contactFilter !== 'all'
                       ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                      : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                   }`}
                 >
-                  <option value="all">All Outreach</option>
-                  <option value="contacted">Contacted</option>
-                  <option value="uncontacted">Uncontacted</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Outreach</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="contacted">Contacted</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="uncontacted">Uncontacted</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
               </div>
@@ -414,15 +414,15 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 <select
                   value={filters.notesFilter || 'all'}
                   onChange={(e) => onChange({ notesFilter: e.target.value as NotesFilter, page: 1 })}
-                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                     filters.notesFilter && filters.notesFilter !== 'all'
                       ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                      : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                   }`}
                 >
-                  <option value="all">All Notes</option>
-                  <option value="has_notes">Has Notes</option>
-                  <option value="no_notes">No Notes</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Notes</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="has_notes">Has Notes</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="no_notes">No Notes</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
               </div>
@@ -437,17 +437,17 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 <select
                   value={filters.minRating}
                   onChange={(e) => onChange({ minRating: parseFloat(e.target.value), page: 1 })}
-                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                     filters.minRating > 0
                       ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                      : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                   }`}
                 >
-                  <option value={0}>Any Rating</option>
-                  <option value={4.8}>4.8 and Above</option>
-                  <option value={4.5}>4.5 and Above</option>
-                  <option value={4.0}>4.0 and Above</option>
-                  <option value={3.5}>3.5 and Above</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={0}>Any Rating</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={4.8}>4.8 and Above</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={4.5}>4.5 and Above</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={4.0}>4.0 and Above</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={3.5}>3.5 and Above</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
               </div>
@@ -462,17 +462,17 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 <select
                   value={filters.minReviews}
                   onChange={(e) => onChange({ minReviews: parseInt(e.target.value, 10), page: 1 })}
-                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                     filters.minReviews > 0
                       ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                      : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                   }`}
                 >
-                  <option value={0}>Any Reviews</option>
-                  <option value={10}>10+ Reviews</option>
-                  <option value={25}>25+ Reviews</option>
-                  <option value={50}>50+ Reviews</option>
-                  <option value={100}>100+ Reviews</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={0}>Any Reviews</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={10}>10+ Reviews</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={25}>25+ Reviews</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={50}>50+ Reviews</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value={100}>100+ Reviews</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
               </div>
@@ -487,16 +487,16 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 <select
                   value={filters.tier}
                   onChange={(e) => onChange({ tier: e.target.value, page: 1 })}
-                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-850 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
+                  className={`w-full appearance-none pl-2.5 pr-7 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer transition-all ${
                     filters.tier !== 'all'
                       ? 'border-zinc-900 dark:border-zinc-300 font-semibold ring-1 ring-zinc-900/10'
-                      : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-650'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                   }`}
                 >
-                  <option value="all">All Tiers</option>
-                  <option value="A">Tier A: Priority</option>
-                  <option value="B">Tier B: Qualified</option>
-                  <option value="C">Tier C: Standard</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="all">All Tiers</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="A">Tier A: Priority</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="B">Tier B: Qualified</option>
+                  <option className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100" value="C">Tier C: Standard</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
               </div>
