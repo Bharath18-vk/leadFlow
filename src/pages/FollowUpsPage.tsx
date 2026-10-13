@@ -108,30 +108,30 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
         ? 'border-rose-200 dark:border-rose-900/60 hover:border-rose-300 dark:hover:border-rose-700'
         : type === 'today'
         ? 'border-amber-200 dark:border-amber-900/60 hover:border-amber-300 dark:hover:border-amber-700'
-        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700';
+        : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700';
 
     const badgeStyle =
       type === 'overdue'
         ? 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800'
         : type === 'today'
         ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800'
-        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700';
+        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700';
 
     return (
       <div
         key={lead.id}
         onClick={() => onSelectLead(lead)}
-        className={`p-4 rounded-lg border bg-white dark:bg-zinc-900 shadow-xs transition-colors cursor-pointer space-y-3 ${cardBorder}`}
+        className={`p-4 rounded-lg border bg-white dark:bg-zinc-900 shadow-xs transition-all duration-150 hover:-translate-y-0.5 cursor-pointer space-y-3 ${cardBorder}`}
       >
         <div className="flex items-start justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
+              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-tight">
                 {lead.businessName}
               </h3>
               <TierBadge tier={lead.leadTier} score={lead.leadScore} showScore={false} />
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{lead.category} • {lead.city}</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{lead.category} - {lead.city}</p>
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
@@ -143,19 +143,19 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
         </div>
 
         {/* Contact info & Notes preview */}
-        <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
-          <span className="font-mono text-slate-700 dark:text-slate-300">
+        <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <span className="font-mono text-zinc-700 dark:text-zinc-300">
             {formatPhoneNumber(lead.phone)}
           </span>
           {(lead.contactAttempts ?? 0) > 0 && (
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
               {lead.contactAttempts} attempt{(lead.contactAttempts ?? 0) > 1 ? 's' : ''}
             </span>
           )}
         </div>
 
         {lead.notes && (
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-lg text-xs text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 italic line-clamp-2">
+          <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-md text-xs text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80 italic line-clamp-2">
             "{lead.notes}"
           </div>
         )}
@@ -252,8 +252,8 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
             <Clock className="w-5 h-5" strokeWidth={1.5} />
           </div>
           <div className="space-y-1">
-            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">No Follow-ups Scheduled</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">No Follow-ups Scheduled</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
               Open any prospect in the Leads table or Outreach Queue, then set a follow-up date for tomorrow, in 3 days, or next week.
             </p>
           </div>
@@ -305,11 +305,11 @@ export const FollowUpsPage: React.FC<FollowUpsPageProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                  <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
                     Upcoming ({upcoming.length})
                   </h2>
                 </div>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Future scheduled contacts</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Future scheduled contacts</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
                 {upcoming.map((l) => renderFollowUpCard(l, 'upcoming'))}

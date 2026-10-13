@@ -65,11 +65,14 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
 
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto font-sans">
-      {/* Top Banner: Restrained Executive Surface (No harsh gradients, no emojis) */}
-      <div className="bg-zinc-900 text-white rounded-lg p-6 border border-zinc-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 shadow-sm">
+      {/* Top Banner: Restrained Executive Surface with Emerald Accent */}
+      <div className="relative bg-zinc-900 text-white rounded-xl p-6 border border-zinc-800/80 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 shadow-md overflow-hidden">
+        {/* Subtle top glow line */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+
         <div className="space-y-2 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-zinc-800 text-[11px] font-semibold uppercase tracking-wider text-zinc-300 border border-zinc-700">
-            <Send className="w-3.5 h-3.5 text-emerald-400" strokeWidth={1.5} />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-zinc-800/90 text-[11px] font-semibold uppercase tracking-wider text-emerald-400 border border-zinc-700/60">
+            <Send className="w-3 h-3 text-emerald-400" strokeWidth={1.5} />
             <span>Outreach Pipeline</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight text-white">Daily Queue Execution</h1>
@@ -80,18 +83,18 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
 
         {/* Progress Display & Big CTA */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
-          <div className="bg-zinc-950/60 rounded-lg p-3.5 min-w-[170px] border border-zinc-800">
-            <div className="flex justify-between text-xs text-zinc-400 font-medium mb-1">
+          <div className="bg-zinc-950/70 rounded-lg p-3.5 min-w-[180px] border border-zinc-800/80">
+            <div className="flex justify-between text-xs text-zinc-400 font-medium mb-1.5">
               <span>Today's Target</span>
-              <span className="font-bold text-zinc-200 tabular-nums">{goalPercent}%</span>
+              <span className="font-bold text-emerald-400 tabular-nums">{goalPercent}%</span>
             </div>
             <div className="text-xl font-bold tabular-nums text-white">
               {stats.todayOutreachCount}{' '}
               <span className="text-xs font-normal text-zinc-400">/ {dailyGoal} completed</span>
             </div>
-            <div className="h-1.5 w-full bg-zinc-800 rounded-full mt-2 overflow-hidden">
+            <div className="h-1.5 w-full bg-zinc-800 rounded-full mt-2.5 overflow-hidden">
               <div
-                className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 shadow-sm shadow-emerald-500/50"
                 style={{ width: `${goalPercent}%` }}
               />
             </div>
@@ -103,7 +106,7 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
             onClick={onOpenNextLead}
             disabled={eligibleQueue.length === 0}
             icon={<Send className="w-4 h-4" strokeWidth={1.5} />}
-            className="py-3 px-5 text-sm font-semibold"
+            className="py-3 px-5 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white border-0 shadow-lg shadow-emerald-600/20 active:scale-[0.98]"
             title="Open highest-scoring uncontacted lead"
           >
             {eligibleQueue.length > 0 ? 'Open Next Lead' : 'All Contacted'}
@@ -190,7 +193,7 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
                     >
                       <td className="py-3 px-3 text-center font-mono text-zinc-400 dark:text-zinc-500">
                         {isActive ? (
-                          <span className="w-4 h-4 rounded-sm bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 font-bold inline-flex items-center justify-center text-[9px]">
+                          <span className="w-4 h-4 rounded-full bg-emerald-500 text-white font-bold inline-flex items-center justify-center text-[9px] shadow-sm shadow-emerald-500/50">
                             •
                           </span>
                         ) : (
@@ -202,7 +205,7 @@ export const OutreachQueuePage: React.FC<OutreachQueuePageProps> = ({
                         <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 flex-wrap">
                           <span>{lead.businessName}</span>
                           {isActive && (
-                            <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
+                            <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                               Active
                             </span>
                           )}

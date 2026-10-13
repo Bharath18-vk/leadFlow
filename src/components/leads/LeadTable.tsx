@@ -9,6 +9,10 @@ import {
   ArrowUp,
   ArrowDown,
   MapPin,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Building2,
 } from 'lucide-react';
 import type { Lead, LeadFilterState, LeadStatus } from '../../types/lead';
 import { TierBadge } from './TierBadge';
@@ -61,13 +65,16 @@ export const LeadTable: React.FC<LeadTableProps> = ({
   };
 
   const renderSortIcon = (field: LeadFilterState['sortBy']) => {
-    if (filters.sortBy !== field) {
-      return <ArrowUpDown className="w-3.5 h-3.5 text-zinc-300 dark:text-zinc-600 ml-1 inline" />;
+    const isCurrent = filters.sortBy === field;
+    if (!isCurrent) {
+      return (
+        <ArrowUpDown className="w-3.5 h-3.5 text-zinc-300 dark:text-zinc-650 opacity-0 group-hover/col:opacity-100 transition-opacity ml-1.5 shrink-0" />
+      );
     }
     return filters.sortOrder === 'asc' ? (
-      <ArrowUp className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 ml-1 inline" />
+      <ArrowUp className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 ml-1.5 shrink-0" />
     ) : (
-      <ArrowDown className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 ml-1 inline" />
+      <ArrowDown className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 ml-1.5 shrink-0" />
     );
   };
 
@@ -90,18 +97,18 @@ export const LeadTable: React.FC<LeadTableProps> = ({
   ];
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-xs overflow-hidden transition-colors">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs overflow-hidden transition-all">
       {/* Table Container */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm text-zinc-600 dark:text-zinc-300">
-          <thead className="bg-zinc-50 dark:bg-zinc-800/80 border-b border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider select-none">
-            <tr>
-              <th scope="col" className="py-3 px-3.5 w-12 text-center text-zinc-400 dark:text-zinc-500 font-mono">
+        <table className="w-full text-left text-sm text-zinc-600 dark:text-zinc-300 border-collapse">
+          <thead>
+            <tr className="bg-zinc-50/90 dark:bg-zinc-800/80 border-b border-zinc-200 dark:border-zinc-800 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider select-none">
+              <th scope="col" className="py-3 px-3.5 w-12 text-center font-mono text-zinc-400 dark:text-zinc-500">
                 #
               </th>
               <th
                 scope="col"
-                className="py-3 px-4 cursor-pointer hover:bg-zinc-100/80 dark:hover:bg-zinc-700/60 transition-colors"
+                className="py-3 px-4 cursor-pointer hover:bg-zinc-100/70 dark:hover:bg-zinc-700/50 transition-colors group/col"
                 onClick={() => handleSort('name')}
               >
                 <div className="flex items-center">
@@ -114,7 +121,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               </th>
               <th
                 scope="col"
-                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/80 dark:hover:bg-zinc-700/60 transition-colors text-right"
+                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/70 dark:hover:bg-zinc-700/50 transition-colors text-right group/col"
                 onClick={() => handleSort('rating')}
               >
                 <div className="flex items-center justify-end">
@@ -124,7 +131,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               </th>
               <th
                 scope="col"
-                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/80 dark:hover:bg-zinc-700/60 transition-colors text-right"
+                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/70 dark:hover:bg-zinc-700/50 transition-colors text-right group/col"
                 onClick={() => handleSort('reviews')}
               >
                 <div className="flex items-center justify-end">
@@ -134,7 +141,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               </th>
               <th
                 scope="col"
-                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/80 dark:hover:bg-zinc-700/60 transition-colors text-right"
+                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/70 dark:hover:bg-zinc-700/50 transition-colors text-right group/col"
                 onClick={() => handleSort('images')}
               >
                 <div className="flex items-center justify-end">
@@ -147,7 +154,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               </th>
               <th
                 scope="col"
-                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/80 dark:hover:bg-zinc-700/60 transition-colors"
+                className="py-3 px-3 cursor-pointer hover:bg-zinc-100/70 dark:hover:bg-zinc-700/50 transition-colors group/col"
                 onClick={() => handleSort('score')}
               >
                 <div className="flex items-center">
@@ -163,14 +170,17 @@ export const LeadTable: React.FC<LeadTableProps> = ({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
             {leads.length === 0 ? (
               <tr>
-                <td colSpan={10} className="py-12 text-center text-zinc-400 dark:text-zinc-500">
-                  <div className="max-w-sm mx-auto space-y-2">
-                    <p className="text-base font-semibold text-zinc-700 dark:text-zinc-200">No leads found</p>
-                    <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                      Try adjusting your search criteria or clear current filters.
+                <td colSpan={10} className="py-16 text-center text-zinc-400 dark:text-zinc-500">
+                  <div className="max-w-sm mx-auto space-y-3">
+                    <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto text-zinc-400 dark:text-zinc-500">
+                      <Building2 className="w-6 h-6 stroke-1" />
+                    </div>
+                    <p className="text-base font-semibold text-zinc-800 dark:text-zinc-200">No leads match your criteria</p>
+                    <p className="text-xs text-zinc-400 dark:text-zinc-500 leading-relaxed">
+                      Try clearing search terms or resetting filters to view all imported prospects.
                     </p>
                   </div>
                 </td>
@@ -184,16 +194,16 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                   <tr
                     key={lead.id}
                     onClick={() => onSelectLead && onSelectLead(lead)}
-                    className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors group cursor-pointer"
+                    className="hover:bg-zinc-50/90 dark:hover:bg-zinc-800/50 transition-colors group cursor-pointer"
                   >
                     {/* Index */}
-                    <td className="py-3 px-3.5 text-center text-xs text-zinc-400 dark:text-zinc-500 font-mono">
+                    <td className="py-3 px-3.5 text-center text-xs text-zinc-400 dark:text-zinc-500 font-mono tabular-nums">
                       {rowNum}
                     </td>
 
                     {/* Business Name & Address */}
                     <td className="py-3 px-4">
-                      <div className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                         <span>{lead.businessName}</span>
                         {lead.googleMapsUrl && (
                           <a
@@ -202,17 +212,17 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                             rel="noreferrer"
                             onClick={(e) => e.stopPropagation()}
                             title="Open Google Maps link"
-                            className="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-opacity"
+                            className="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all p-0.5 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </a>
                         )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500 mt-0.5 line-clamp-1">
+                      <div className="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500 mt-0.5 line-clamp-1">
                         {lead.city && (
-                          <span className="flex items-center gap-0.5">
-                            <MapPin className="w-3 h-3 shrink-0" />
-                            {lead.neighborhood ? `${lead.neighborhood}, ${lead.city}` : lead.city}
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3 shrink-0 text-zinc-400 dark:text-zinc-500" />
+                            <span>{lead.neighborhood ? `${lead.neighborhood}, ${lead.city}` : lead.city}</span>
                           </span>
                         )}
                       </div>
@@ -220,7 +230,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
 
                     {/* Category */}
                     <td className="py-3 px-3">
-                      <span className="inline-block max-w-[140px] truncate text-xs text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-sm">
+                      <span className="inline-block max-w-[140px] truncate text-xs text-zinc-600 dark:text-zinc-300 bg-zinc-100/90 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-700/50 font-medium">
                         {lead.category || 'Interior Designer'}
                       </span>
                     </td>
@@ -254,17 +264,21 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                     <td className="py-3 px-3.5">
                       {lead.phone ? (
                         <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-xs text-zinc-800 dark:text-zinc-200 select-all">
+                          <span className="font-mono text-xs text-zinc-800 dark:text-zinc-200 select-all font-medium">
                             {formatPhoneNumber(lead.phone)}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleCopyPhone(lead, e)}
                             title="Copy phone number"
-                            className="p-1 rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+                            className={`p-1 rounded-md transition-all active:scale-95 ${
+                              isCopied
+                                ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400'
+                                : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700'
+                            }`}
                           >
                             {isCopied ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              <Check className="w-3.5 h-3.5" />
                             ) : (
                               <Copy className="w-3.5 h-3.5" />
                             )}
@@ -282,17 +296,20 @@ export const LeadTable: React.FC<LeadTableProps> = ({
 
                     {/* Status Dropdown */}
                     <td className="py-3 px-3.5" onClick={(e) => e.stopPropagation()}>
-                      <select
-                        value={lead.status}
-                        onChange={(e) => onStatusChange(lead.id, e.target.value as LeadStatus)}
-                        className="text-xs font-medium py-1 px-2 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-600 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer"
-                      >
-                        {ALL_STATUSES.map((status) => (
-                          <option key={status} value={status}>
-                            {status}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative inline-block">
+                        <select
+                          value={lead.status}
+                          onChange={(e) => onStatusChange(lead.id, e.target.value as LeadStatus)}
+                          className="appearance-none text-xs font-medium py-1 pl-2.5 pr-6 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-600 focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:outline-none cursor-pointer transition-colors"
+                        >
+                          {ALL_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="w-3 h-3 text-zinc-400 pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2" />
+                      </div>
                     </td>
 
                     {/* Actions */}
@@ -300,7 +317,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                       <button
                         type="button"
                         onClick={() => onSelectLead && onSelectLead(lead)}
-                        className="px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 rounded-md transition-colors active:scale-[0.98]"
+                        className="px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-white dark:hover:text-zinc-950 hover:bg-zinc-900 dark:hover:bg-zinc-100 border border-zinc-200 dark:border-zinc-700 rounded-lg transition-all active:scale-95 shadow-2xs"
                       >
                         View Details
                       </button>
@@ -314,26 +331,29 @@ export const LeadTable: React.FC<LeadTableProps> = ({
       </div>
 
       {/* Pagination Footer */}
-      <div className="px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-600 dark:text-zinc-400">
+      <div className="px-4 py-3 bg-zinc-50/80 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-600 dark:text-zinc-400">
         <div className="flex items-center gap-2">
           <span>Rows per page:</span>
-          <select
-            value={filters.pageSize}
-            onChange={(e) =>
-              onFilterChange({ pageSize: parseInt(e.target.value, 10), page: 1 })
-            }
-            className="px-2 py-1 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 rounded-md text-xs focus:ring-1 focus:ring-zinc-400"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
-          <span className="text-zinc-400 dark:text-zinc-500">|</span>
+          <div className="relative">
+            <select
+              value={filters.pageSize}
+              onChange={(e) =>
+                onFilterChange({ pageSize: parseInt(e.target.value, 10), page: 1 })
+              }
+              className="appearance-none pl-2.5 pr-6 py-1 bg-white dark:bg-zinc-800 border border-zinc-250 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 rounded-md text-xs focus:ring-1 focus:ring-zinc-400 cursor-pointer"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+            <ChevronDown className="w-3 h-3 text-zinc-400 pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2" />
+          </div>
+          <span className="text-zinc-300 dark:text-zinc-700">|</span>
           <span>
-            Showing <strong className="text-zinc-800 dark:text-zinc-200">{totalCount > 0 ? startRow : 0}</strong> to{' '}
-            <strong className="text-zinc-800 dark:text-zinc-200">{endRow}</strong> of{' '}
-            <strong className="text-zinc-800 dark:text-zinc-200">{totalCount}</strong> leads
+            Showing <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">{totalCount > 0 ? startRow : 0}</strong> to{' '}
+            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">{endRow}</strong> of{' '}
+            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">{totalCount}</strong> leads
           </span>
         </div>
 
@@ -342,9 +362,10 @@ export const LeadTable: React.FC<LeadTableProps> = ({
             type="button"
             disabled={filters.page <= 1}
             onClick={() => onFilterChange({ page: filters.page - 1 })}
-            className="px-3 py-1 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+            className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-zinc-800 border border-zinc-250 dark:border-zinc-700 rounded-lg text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-750 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-2xs"
           >
-            Previous
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span>Previous</span>
           </button>
           <span className="px-2 font-medium text-zinc-700 dark:text-zinc-300">
             Page {filters.page} of {totalPages}
@@ -353,9 +374,10 @@ export const LeadTable: React.FC<LeadTableProps> = ({
             type="button"
             disabled={filters.page >= totalPages}
             onClick={() => onFilterChange({ page: filters.page + 1 })}
-            className="px-3 py-1 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+            className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-zinc-800 border border-zinc-250 dark:border-zinc-700 rounded-lg text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-750 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-2xs"
           >
-            Next
+            <span>Next</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

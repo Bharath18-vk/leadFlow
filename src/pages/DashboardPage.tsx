@@ -50,17 +50,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
   if (leads.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-6 text-center space-y-8 animate-in fade-in duration-200 font-sans">
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-semibold border border-zinc-200 dark:border-zinc-700">
-            <Layers className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
-            <span>Local-First Sales Workspace</span>
+      <div className="max-w-4xl mx-auto py-16 px-6 text-center space-y-10 animate-in fade-in duration-300 font-sans">
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Local-First Intelligence Engine</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-            LeadFlow Workspace
+          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+            LeadFlow Sales Console
           </h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto leading-relaxed">
-            Ingest spreadsheet leads from Google Maps or scrapers into an organized, local-first outreach console.
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto leading-relaxed">
+            Ingest spreadsheet leads from Google Maps or scrapers into an organized, local-first outreach console with intelligent ranking and safe auto-batching.
           </p>
         </div>
 
@@ -70,6 +70,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             variant="primary"
             onClick={onOpenImport}
             icon={<UploadCloud className="w-4 h-4" strokeWidth={1.5} />}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/25 px-6 py-3"
           >
             Import Excel or CSV
           </Button>
@@ -78,15 +79,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             variant="outline"
             onClick={onLoadDemo}
             icon={<Layers className="w-4 h-4 text-zinc-500" strokeWidth={1.5} />}
+            className="px-6 py-3"
           >
             Load Sample Dataset
           </Button>
         </div>
 
-        {/* Asymmetrical Architectural Onboarding Grid (No 3-feature row cliche) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pt-6 text-left">
-          <div className="md:col-span-7 p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
-            <span className="text-[11px] font-mono uppercase text-zinc-400 font-semibold tracking-wider">
+        {/* Asymmetrical Architectural Onboarding Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pt-4 text-left">
+          <div className="md:col-span-7 p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm space-y-2.5 transition-all hover:-translate-y-0.5">
+            <span className="text-[10px] font-mono uppercase text-zinc-400 font-semibold tracking-widest">
               Data Pipeline
             </span>
             <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Spreadsheet Ingestion & Merge</h2>
@@ -95,8 +97,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </p>
           </div>
 
-          <div className="md:col-span-5 p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 space-y-2">
-            <span className="text-[11px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-semibold tracking-wider">
+          <div className="md:col-span-5 p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/80 dark:bg-zinc-900/60 backdrop-blur-sm space-y-2.5 transition-all hover:-translate-y-0.5">
+            <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-semibold tracking-widest">
               Privacy Architecture
             </span>
             <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Zero External Telemetry</h2>
@@ -222,44 +224,59 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           )}
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 text-center transition-all hover:-translate-y-0.5">
               <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block">Contact Rate</span>
               <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100 mt-1 block tabular-nums">
                 {stats.conversionMetrics.contactRate}%
               </span>
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Contacted / Total</span>
+              <div className="w-full bg-zinc-200 dark:bg-zinc-700/60 h-1 rounded-full mt-2 overflow-hidden">
+                <div className="bg-blue-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, stats.conversionMetrics.contactRate)}%` }} />
+              </div>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 block">Contacted / Total</span>
             </div>
 
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 text-center transition-all hover:-translate-y-0.5">
               <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block">Reply Rate</span>
               <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100 mt-1 block tabular-nums">
                 {stats.conversionMetrics.replyRate}%
               </span>
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Replied / Contacted</span>
+              <div className="w-full bg-zinc-200 dark:bg-zinc-700/60 h-1 rounded-full mt-2 overflow-hidden">
+                <div className="bg-sky-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, stats.conversionMetrics.replyRate)}%` }} />
+              </div>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 block">Replied / Contacted</span>
             </div>
 
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 text-center transition-all hover:-translate-y-0.5">
               <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block">Interest Rate</span>
               <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100 mt-1 block tabular-nums">
                 {stats.conversionMetrics.interestRate}%
               </span>
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Interested / Replied</span>
+              <div className="w-full bg-zinc-200 dark:bg-zinc-700/60 h-1 rounded-full mt-2 overflow-hidden">
+                <div className="bg-teal-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, stats.conversionMetrics.interestRate)}%` }} />
+              </div>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 block">Interested / Replied</span>
             </div>
 
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 text-center transition-all hover:-translate-y-0.5">
               <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block">Demo Rate</span>
               <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100 mt-1 block tabular-nums">
                 {stats.conversionMetrics.demoRate}%
               </span>
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Demo / Interested</span>
+              <div className="w-full bg-zinc-200 dark:bg-zinc-700/60 h-1 rounded-full mt-2 overflow-hidden">
+                <div className="bg-cyan-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, stats.conversionMetrics.demoRate)}%` }} />
+              </div>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 block">Demo / Interested</span>
             </div>
 
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-800 text-center col-span-2 sm:col-span-1">
-              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block">Win Rate</span>
+            <div className="p-3 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 text-center col-span-2 sm:col-span-1 transition-all hover:-translate-y-0.5">
+              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 block">Win Rate</span>
               <span className="text-lg font-bold font-mono text-emerald-600 dark:text-emerald-400 mt-1 block tabular-nums">
                 {stats.conversionMetrics.winRate}%
               </span>
-              <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Won / Demo</span>
+              <div className="w-full bg-emerald-200/80 dark:bg-emerald-900/60 h-1 rounded-full mt-2 overflow-hidden">
+                <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, stats.conversionMetrics.winRate)}%` }} />
+              </div>
+              <span className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80 mt-1 block">Won / Demo</span>
             </div>
           </div>
         </div>
@@ -302,7 +319,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <div
               key={lead.id}
               onClick={() => onSelectLead(lead)}
-              className="py-3 flex items-center justify-between gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 px-2 rounded-md transition-colors cursor-pointer"
+              className="py-3 flex items-center justify-between gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 px-3 rounded-lg transition-all duration-150 cursor-pointer group"
             >
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500 w-5 text-right tabular-nums">

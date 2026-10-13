@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { LandingPage } from './pages/LandingPage';
 import { Sidebar, type NavTab } from './components/layout/Sidebar';
 import { TopHeader } from './components/layout/TopHeader';
 import { DashboardPage } from './pages/DashboardPage';
@@ -48,10 +49,18 @@ interface ToastNotification {
 
 export function App() {
   useTheme();
+  const [showLanding, setShowLanding] = useState<boolean>(() => {
+    return localStorage.getItem('leadflow_entered') !== 'true';
+  });
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filters, setFilters] = useState<LeadFilterState>(DEFAULT_FILTERS);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+
+  const handleEnterApp = useCallback(() => {
+    localStorage.setItem('leadflow_entered', 'true');
+    setShowLanding(false);
+  }, []);
 
   // Modals, dialogs & toasts
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -525,8 +534,12 @@ export function App() {
 
   const headerMeta = getHeaderMeta();
 
+  if (showLanding) {
+    return <LandingPage onEnter={handleEnterApp} />;
+  }
+
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors">
+    <div className="flex min-h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 font-sans transition-colors">
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <Sidebar
@@ -540,6 +553,7 @@ export function App() {
           followUpsCount={stats.overdueFollowUpsCount + stats.todayFollowUpsCount}
           templatesCount={templatesCount}
           onOpenLegal={handleOpenLegal}
+          onOpenLanding={() => setShowLanding(true)}
         />
       </div>
 
@@ -562,6 +576,10 @@ export function App() {
               followUpsCount={stats.overdueFollowUpsCount + stats.todayFollowUpsCount}
               templatesCount={templatesCount}
               onOpenLegal={handleOpenLegal}
+              onOpenLanding={() => {
+                setIsMobileMenuOpen(false);
+                setShowLanding(true);
+              }}
             />
           </div>
         </div>
@@ -577,10 +595,11 @@ export function App() {
           onLoadDemo={handleLoadDemo}
           onExport={handleExportLeads}
           onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onOpenLanding={() => setShowLanding(true)}
           hasLeads={leads.length > 0}
         />
 
-        <main className="flex-1 overflow-y-auto">
+        <main key={currentTab} className="flex-1 overflow-y-auto page-enter">
           {currentTab === 'dashboard' && (
             <DashboardPage
               leads={leads}

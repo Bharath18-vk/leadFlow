@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Star,
@@ -36,7 +36,6 @@ import {
 } from '../../lib/dateUtils';
 import { loadTemplates, renderTemplate } from '../../lib/templates';
 import type { MessageTemplate } from '../../types/template';
-
 
 interface LeadDetailPanelProps {
   lead: Lead | null;
@@ -93,6 +92,46 @@ export const LeadDetailPanel: React.FC<LeadDetailPanelProps> = ({
     setSelectedTemplateId('');
   }, [lead?.id, lead?.customMessage, lead?.personalizedMessage, lead?.notes]);
 
+  // Keyboard shortcut listener
+  useEffect(() => {
+    if (!lead) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      // Skip single-key shortcuts when user is interacting with text inputs
+      const activeEl = document.activeElement;
+      const tagName = activeEl?.tagName?.toLowerCase();
+      const isInput =
+        tagName === 'input' ||
+        tagName === 'textarea' ||
+        tagName === 'select' ||
+        activeEl?.getAttribute('contenteditable') === 'true';
+
+      if (isInput) return;
+
+      if (e.key === 'o' || e.key === 'O') {
+        e.preventDefault();
+        handleOpenWhatsApp();
+      } else if (e.key === 'c' || e.key === 'C') {
+        e.preventDefault();
+        handleCopyMessage();
+      } else if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        handleConfirmContacted();
+      } else if ((e.key === 'n' || e.key === 'N') && onNextLead && hasNextLead) {
+        e.preventDefault();
+        onNextLead();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lead, currentMessage, hasNextLead, onNextLead, onClose]);
 
   if (!lead) return null;
 
@@ -135,7 +174,6 @@ export const LeadDetailPanel: React.FC<LeadDetailPanelProps> = ({
     handleMessageChange(rendered);
   };
 
-
   // Handle notes changes & auto-persist
   const handleNotesChange = (val: string) => {
     setNotes(val);
@@ -170,595 +208,689 @@ export const LeadDetailPanel: React.FC<LeadDetailPanelProps> = ({
   const contactAttempts = lead.contactAttempts ?? (lead.status === 'Contacted' ? 1 : 0);
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-200 dark:border-slate-800 flex flex-col animate-in slide-in-from-right duration-200 text-slate-900 dark:text-slate-100 transition-colors">
-      {/* Top Bar with Navigation & Actions */}
-      <div className="px-6 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/90 dark:bg-slate-900/90">
-        <div className="flex items-center gap-2">
-          <TierBadge tier={lead.leadTier} score={lead.leadScore} showScore />
-          <StatusBadge status={lead.status} />
-          {lead.followUpDate && (
-            <span
-              className={`inline-flex items-center gap-1 text-[11px] font-medium font-mono px-2 py-0.5 rounded-sm border ${
-                followUpUrgency === 'overdue'
-                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
-                  : followUpUrgency === 'today'
-                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
-                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
-              }`}
-            >
-              <Clock className="w-3 h-3" />
-              <span>{formatFollowUpDisplay(lead.followUpDate)}</span>
-            </span>
-          )}
-        </div>
+    <>
+      {/* Blurred Backdrop Overlay */}
+      <div
+        className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs z-40 transition-opacity animate-in fade-in duration-200"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
-        <div className="flex items-center gap-2">
-          {onNextLead && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onNextLead}
-              disabled={!hasNextLead}
-              icon={<ArrowRight className="w-3.5 h-3.5" />}
-              title="Jump to the next highest-scoring uncontacted lead (Keyboard: N)"
-              className="text-xs"
-            >
-              Next Lead
-            </Button>
-          )}
-
-          <button
-            onClick={onClose}
-            aria-label="Close panel"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-            title="Close Inspector (Esc)"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-
-      {/* Main Drawer Body */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
-        {/* SECTION 1: Business Information */}
-        <div>
-          <div className="flex items-start justify-between gap-3">
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">
-              {lead.businessName}
-            </h2>
-            {lead.googleMapsUrl && (
-              <a
-                href={lead.googleMapsUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 px-2.5 py-1 rounded-md shrink-0 transition-colors"
-                title="Open in Google Maps"
+      {/* Main Drawer Container */}
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white dark:bg-zinc-900 shadow-2xl border-l border-zinc-200 dark:border-zinc-800 flex flex-col animate-in slide-in-from-right duration-250 ease-out text-zinc-900 dark:text-zinc-100 transition-colors">
+        {/* Top Header Bar */}
+        <div className="sticky top-0 z-10 px-6 py-3.5 border-b border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-between bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md">
+          <div className="flex items-center gap-2 flex-wrap">
+            <TierBadge tier={lead.leadTier} score={lead.leadScore} showScore />
+            <StatusBadge status={lead.status} />
+            {lead.followUpDate && (
+              <span
+                className={`inline-flex items-center gap-1 text-[11px] font-medium font-mono px-2 py-0.5 rounded-md border ${
+                  followUpUrgency === 'overdue'
+                    ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
+                    : followUpUrgency === 'today'
+                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+                }`}
               >
-                <span>Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
-              </a>
-            )}
-          </div>
-          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">{lead.category}</p>
-
-          {lead.address && (
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-start gap-1">
-              <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-              <span>{lead.address}</span>
-            </p>
-          )}
-
-          {/* Reputation Summary Grid */}
-          <div className="grid grid-cols-3 gap-3 mt-3.5">
-            <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-center">
-              <div className="flex items-center justify-center gap-1 font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span>{lead.rating ? lead.rating.toFixed(1) : '-'}</span>
-              </div>
-              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block mt-0.5">Rating</span>
-            </div>
-
-            <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-center">
-              <div className="font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
-                {lead.reviews ? formatNumber(lead.reviews) : 0}
-              </div>
-              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block mt-0.5">Reviews</span>
-            </div>
-
-            <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-center">
-              <div className="flex items-center justify-center gap-1 font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
-                <ImageIcon className="w-4 h-4 text-zinc-400" strokeWidth={1.5} />
-                <span>{lead.images ? formatNumber(lead.images) : 0}</span>
-              </div>
-              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block mt-0.5">Photos</span>
-            </div>
-          </div>
-        </div>
-
-        {/* SECTION 2: Contact & Communication */}
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-md border border-zinc-200 dark:border-zinc-800 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
-              Contact Phone
-            </span>
-
-            {phoneValidation.valid ? (
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded-sm bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                WhatsApp Ready
-              </span>
-            ) : (
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded-sm bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                Invalid / Missing
+                <Clock className="w-3 h-3" />
+                <span>{formatFollowUpDisplay(lead.followUpDate)}</span>
               </span>
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-base font-bold text-zinc-900 dark:text-zinc-100">
-              {phoneValidation.valid ? phoneValidation.displayPhone : lead.phone || 'No phone number'}
-            </span>
-
-            {lead.phone && (
+          <div className="flex items-center gap-2">
+            {onNextLead && (
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleCopyPhone}
-                icon={copiedPhone ? <Check className="w-3.5 h-3.5 text-emerald-600" strokeWidth={1.5} /> : <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />}
-                className="text-xs"
+                onClick={onNextLead}
+                disabled={!hasNextLead}
+                icon={<ArrowRight className="w-3.5 h-3.5" />}
+                title="Jump to the next highest-scoring uncontacted lead (Keyboard: N)"
+                className="text-xs shadow-2xs hover:border-zinc-400 dark:hover:border-zinc-600 active:scale-95"
               >
-                {copiedPhone ? 'Copied' : 'Copy Phone'}
+                <span>Next Lead</span>
+                <kbd className="hidden sm:inline-block ml-1 px-1 py-0.2 text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 rounded font-mono">
+                  N
+                </kbd>
               </Button>
+            )}
+
+            <button
+              onClick={onClose}
+              aria-label="Close panel"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all active:scale-95"
+              title="Close Inspector (Esc)"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Drawer Body */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* SECTION 1: Business Overview */}
+          <div className="bg-zinc-50/70 dark:bg-zinc-800/40 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 p-4 space-y-3.5">
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-0.5">
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">
+                  {lead.businessName}
+                </h2>
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  {lead.category || 'Business Lead'}
+                </p>
+              </div>
+
+              {lead.googleMapsUrl && (
+                <a
+                  href={lead.googleMapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-750 px-2.5 py-1.5 rounded-lg shrink-0 transition-all active:scale-95 shadow-2xs"
+                  title="Open in Google Maps"
+                >
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
+                </a>
+              )}
+            </div>
+
+            {lead.address && (
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 flex items-start gap-1.5 pt-0.5">
+                <MapPin className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 shrink-0 mt-0.5" />
+                <span>{lead.address}</span>
+              </p>
+            )}
+
+            {/* Reputation Summary Grid */}
+            <div className="grid grid-cols-3 gap-2.5 pt-1">
+              <div className="p-2.5 rounded-lg bg-white dark:bg-zinc-800/80 border border-zinc-200/70 dark:border-zinc-700/70 text-center shadow-2xs">
+                <div className="flex items-center justify-center gap-1 font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
+                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span>{lead.rating ? lead.rating.toFixed(1) : '-'}</span>
+                </div>
+                <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 block mt-0.5 uppercase tracking-wider">
+                  Rating
+                </span>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white dark:bg-zinc-800/80 border border-zinc-200/70 dark:border-zinc-700/70 text-center shadow-2xs">
+                <div className="font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
+                  {lead.reviews ? formatNumber(lead.reviews) : 0}
+                </div>
+                <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 block mt-0.5 uppercase tracking-wider">
+                  Reviews
+                </span>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-white dark:bg-zinc-800/80 border border-zinc-200/70 dark:border-zinc-700/70 text-center shadow-2xs">
+                <div className="flex items-center justify-center gap-1 font-bold font-mono text-zinc-900 dark:text-zinc-100 text-base">
+                  <ImageIcon className="w-4 h-4 text-zinc-400" strokeWidth={1.5} />
+                  <span>{lead.images ? formatNumber(lead.images) : 0}</span>
+                </div>
+                <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 block mt-0.5 uppercase tracking-wider">
+                  Photos
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION 2: Contact Phone */}
+          <div className="p-4 bg-zinc-50/70 dark:bg-zinc-800/40 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
+                Contact Phone
+              </span>
+
+              {phoneValidation.valid ? (
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-medium font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  WhatsApp Ready
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium font-mono px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                  <AlertCircle className="w-3 h-3" />
+                  Invalid / Missing
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-mono text-base font-bold text-zinc-900 dark:text-zinc-100">
+                {phoneValidation.valid ? phoneValidation.displayPhone : lead.phone || 'No phone number'}
+              </span>
+
+              {lead.phone && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyPhone}
+                  icon={
+                    copiedPhone ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    )
+                  }
+                  className="text-xs shadow-2xs hover:border-zinc-400 active:scale-95"
+                >
+                  {copiedPhone ? 'Copied' : 'Copy Phone'}
+                </Button>
+              )}
+            </div>
+
+            {!phoneValidation.valid && (
+              <p className="text-[11px] text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3 shrink-0" strokeWidth={1.5} />
+                <span>{phoneValidation.error || 'Phone number format cannot be used for WhatsApp'}</span>
+              </p>
             )}
           </div>
 
-          {!phoneValidation.valid && (
-            <p className="text-[11px] text-rose-600 dark:text-rose-400 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3 shrink-0" strokeWidth={1.5} />
-              <span>{phoneValidation.error || 'Phone number format cannot be used for WhatsApp'}</span>
-            </p>
-          )}
-        </div>
-
-        {/* SECTION 3: Pipeline Status & Quick Actions */}
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-md border border-zinc-200 dark:border-zinc-800 space-y-3.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
-              Pipeline Stage & Follow-Up
-            </span>
-            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              {contactAttempts > 0 ? `${contactAttempts} contact attempt${contactAttempts > 1 ? 's' : ''}` : 'No outreach yet'}
-            </span>
-          </div>
-
-          {/* Quick Status Selection & Stage Controls */}
-          <div className="space-y-2">
+          {/* SECTION 3: Pipeline Stage & Follow-Up */}
+          <div className="p-4 bg-zinc-50/70 dark:bg-zinc-800/40 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
-                Pipeline Stage
-              </label>
-              <select
-                value={lead.status}
-                onChange={(e) => onUpdateLead(lead.id, { status: e.target.value as LeadStatus })}
-                aria-label="Change lead status"
-                className="text-xs px-2.5 py-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-              >
-                <option value="New">New</option>
-                <option value="Contacted">Contacted</option>
-                <option value="Replied">Replied</option>
-                <option value="Interested">Interested</option>
-                <option value="Demo Sent">Demo Sent</option>
-                <option value="Follow-up">Follow-up</option>
-                <option value="Negotiating">Negotiating</option>
-                <option value="Won">Won</option>
-                <option value="Lost">Lost</option>
-                <option value="Not Interested">Not Interested</option>
-              </select>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                Pipeline Stage & Follow-Up
+              </span>
+              <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                {contactAttempts > 0
+                  ? `${contactAttempts} contact attempt${contactAttempts > 1 ? 's' : ''}`
+                  : 'No outreach yet'}
+              </span>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
-              {[
-                { s: 'Contacted' as LeadStatus, label: 'Contacted', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
-                { s: 'Replied' as LeadStatus, label: 'Replied', color: 'hover:bg-amber-500/10 text-amber-600 dark:text-amber-400' },
-                { s: 'Interested' as LeadStatus, label: 'Interested', color: 'hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' },
-                { s: 'Demo Sent' as LeadStatus, label: 'Demo Sent', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
-                { s: 'Follow-up' as LeadStatus, label: 'Follow-up', color: 'hover:bg-amber-500/10' },
-                { s: 'Negotiating' as LeadStatus, label: 'Negotiating', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
-                { s: 'Won' as LeadStatus, label: 'Won', color: 'hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-semibold' },
-                { s: 'Lost' as LeadStatus, label: 'Lost', color: 'hover:bg-rose-500/10 text-rose-600 dark:text-rose-400' },
-                { s: 'Not Interested' as LeadStatus, label: 'Not Interested', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500' },
-              ].map(({ s, label, color }) => (
+            {/* Quick Status Selection & Stage Controls */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
+                  Pipeline Stage
+                </label>
+                <select
+                  value={lead.status}
+                  onChange={(e) => onUpdateLead(lead.id, { status: e.target.value as LeadStatus })}
+                  aria-label="Change lead status"
+                  className="text-xs px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-2xs cursor-pointer"
+                >
+                  <option value="New">New</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Replied">Replied</option>
+                  <option value="Interested">Interested</option>
+                  <option value="Demo Sent">Demo Sent</option>
+                  <option value="Follow-up">Follow-up</option>
+                  <option value="Negotiating">Negotiating</option>
+                  <option value="Won">Won</option>
+                  <option value="Lost">Lost</option>
+                  <option value="Not Interested">Not Interested</option>
+                </select>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {[
+                  { s: 'Contacted' as LeadStatus, label: 'Contacted', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
+                  { s: 'Replied' as LeadStatus, label: 'Replied', color: 'hover:bg-amber-500/10 text-amber-700 dark:text-amber-400' },
+                  { s: 'Interested' as LeadStatus, label: 'Interested', color: 'hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' },
+                  { s: 'Demo Sent' as LeadStatus, label: 'Demo Sent', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
+                  { s: 'Follow-up' as LeadStatus, label: 'Follow-up', color: 'hover:bg-amber-500/10' },
+                  { s: 'Negotiating' as LeadStatus, label: 'Negotiating', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800' },
+                  { s: 'Won' as LeadStatus, label: 'Won', color: 'hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-semibold' },
+                  { s: 'Lost' as LeadStatus, label: 'Lost', color: 'hover:bg-rose-500/10 text-rose-600 dark:text-rose-400' },
+                  { s: 'Not Interested' as LeadStatus, label: 'Not Interested', color: 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500' },
+                ].map(({ s, label, color }) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => onUpdateLead(lead.id, { status: s })}
+                    className={`text-xs px-2.5 py-1 rounded-lg font-medium border transition-all active:scale-95 shadow-2xs ${
+                      lead.status === s
+                        ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100 font-semibold'
+                        : `bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 ${color}`
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Follow-up Scheduling Controls */}
+            <div className="space-y-2 pt-3 border-t border-zinc-200 dark:border-zinc-750">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <CalendarDays className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
+                  Schedule Follow-up
+                </label>
+                {lead.followUpDate && (
+                  <button
+                    type="button"
+                    onClick={() => handleSetFollowUp(undefined)}
+                    className="text-[11px] text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 flex items-center gap-1 transition-colors"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    Clear Date
+                  </button>
+                )}
+              </div>
+
+              {/* Quick date chips */}
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <button
-                  key={s}
                   type="button"
-                  onClick={() => onUpdateLead(lead.id, { status: s })}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium border transition-all ${
-                    lead.status === s
+                  onClick={() => handleSetFollowUp(addDaysToLocalDate(1))}
+                  className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 shadow-2xs ${
+                    lead.followUpDate === addDaysToLocalDate(1)
                       ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100'
-                      : `bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 ${color}`
+                      : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-750'
                   }`}
                 >
-                  {label}
+                  Tomorrow
                 </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Follow-up Scheduling Controls */}
-          <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <CalendarDays className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                Schedule Follow-up
-              </label>
-              {lead.followUpDate && (
                 <button
                   type="button"
-                  onClick={() => handleSetFollowUp(undefined)}
-                  className="text-[11px] text-rose-600 dark:text-rose-400 hover:text-rose-800 flex items-center gap-0.5"
+                  onClick={() => handleSetFollowUp(addDaysToLocalDate(3))}
+                  className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 shadow-2xs ${
+                    lead.followUpDate === addDaysToLocalDate(3)
+                      ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100'
+                      : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-750'
+                  }`}
                 >
-                  <Trash2 className="w-3 h-3" />
-                  Clear Date
+                  In 3 days
                 </button>
-              )}
-            </div>
+                <button
+                  type="button"
+                  onClick={() => handleSetFollowUp(addDaysToLocalDate(7))}
+                  className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 shadow-2xs ${
+                    lead.followUpDate === addDaysToLocalDate(7)
+                      ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100'
+                      : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-750'
+                  }`}
+                >
+                  In 7 days
+                </button>
 
-            {/* Quick date chips */}
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <button
-                type="button"
-                onClick={() => handleSetFollowUp(addDaysToLocalDate(1))}
-                className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-colors ${
-                  lead.followUpDate === addDaysToLocalDate(1)
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                }`}
-              >
-                Tomorrow
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSetFollowUp(addDaysToLocalDate(3))}
-                className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-colors ${
-                  lead.followUpDate === addDaysToLocalDate(3)
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                }`}
-              >
-                In 3 days
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSetFollowUp(addDaysToLocalDate(7))}
-                className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-colors ${
-                  lead.followUpDate === addDaysToLocalDate(7)
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                }`}
-              >
-                In 7 days
-              </button>
-
-              {/* Custom Date Input */}
-              <div className="relative inline-flex items-center">
-                <input
-                  type="date"
-                  value={lead.followUpDate || ''}
-                  min={getTodayLocalDateString()}
-                  onChange={(e) => handleSetFollowUp(e.target.value || undefined)}
-                  className="text-xs px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Revenue & Deal Tracking */}
-          <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                <IndianRupee className="w-3.5 h-3.5 text-emerald-600" />
-                Revenue & Deal Tracking
-              </label>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500">Optional</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2.5">
-              {/* Quoted Amount */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-medium text-slate-600 dark:text-slate-300 block">Quoted Amount</label>
-                <div className="relative rounded-lg">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400 dark:text-slate-500 font-bold">
-                    ₹
-                  </span>
+                {/* Custom Date Input */}
+                <div className="relative inline-flex items-center">
                   <input
-                    type="number"
-                    min="0"
-                    step="500"
-                    value={lead.quotedAmount ?? ''}
-                    placeholder="e.g. 15000"
-                    onChange={(e) => {
-                      const val = e.target.value === '' ? undefined : Number(e.target.value);
-                      onUpdateLead(lead.id, { quotedAmount: val, currency: 'INR' });
-                    }}
-                    className="w-full pl-6 pr-2.5 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    type="date"
+                    value={lead.followUpDate || ''}
+                    min={getTodayLocalDateString()}
+                    onChange={(e) => handleSetFollowUp(e.target.value || undefined)}
+                    className="text-xs px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-2xs cursor-pointer"
                   />
                 </div>
               </div>
+            </div>
 
-              {/* Deal Value */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-medium text-slate-600 dark:text-slate-300 block">
-                  {lead.status === 'Won' ? 'Final Deal Value' : 'Deal Value'}
+            {/* Revenue & Deal Tracking */}
+            <div className="space-y-2 pt-3 border-t border-zinc-200 dark:border-zinc-750">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <IndianRupee className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  Revenue & Deal Tracking
                 </label>
-                <div className="relative rounded-lg">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                    ₹
-                  </span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="500"
-                    value={lead.dealValue ?? ''}
-                    placeholder="e.g. 12000"
-                    onChange={(e) => {
-                      const val = e.target.value === '' ? undefined : Number(e.target.value);
-                      onUpdateLead(lead.id, { dealValue: val, currency: 'INR' });
-                    }}
-                    className={`w-full pl-6 pr-2.5 py-1.5 text-xs rounded-lg border bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 ${
-                      lead.status === 'Won'
-                        ? 'border-emerald-300 dark:border-emerald-700 ring-1 ring-emerald-400 bg-emerald-50/20 dark:bg-emerald-950/40 font-bold text-emerald-900 dark:text-emerald-300'
-                        : 'border-slate-200 dark:border-slate-700 focus:ring-blue-500'
-                    }`}
-                  />
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Optional</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                {/* Quoted Amount */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-medium text-zinc-600 dark:text-zinc-300 block">
+                    Quoted Amount
+                  </label>
+                  <div className="relative rounded-lg">
+                    <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-zinc-400 dark:text-zinc-500 font-bold">
+                      ₹
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="500"
+                      value={lead.quotedAmount ?? ''}
+                      placeholder="e.g. 15000"
+                      onChange={(e) => {
+                        const val = e.target.value === '' ? undefined : Number(e.target.value);
+                        onUpdateLead(lead.id, { quotedAmount: val, currency: 'INR' });
+                      }}
+                      className="w-full pl-6 pr-2.5 py-1.5 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-400 shadow-2xs"
+                    />
+                  </div>
+                </div>
+
+                {/* Deal Value */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-medium text-zinc-600 dark:text-zinc-300 block">
+                    {lead.status === 'Won' ? 'Final Deal Value' : 'Deal Value'}
+                  </label>
+                  <div className="relative rounded-lg">
+                    <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                      ₹
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="500"
+                      value={lead.dealValue ?? ''}
+                      placeholder="e.g. 12000"
+                      onChange={(e) => {
+                        const val = e.target.value === '' ? undefined : Number(e.target.value);
+                        onUpdateLead(lead.id, { dealValue: val, currency: 'INR' });
+                      }}
+                      className={`w-full pl-6 pr-2.5 py-1.5 text-xs rounded-lg border bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 shadow-2xs ${
+                        lead.status === 'Won'
+                          ? 'border-emerald-400 dark:border-emerald-600 ring-1 ring-emerald-400 bg-emerald-50/20 dark:bg-emerald-950/40 font-bold text-emerald-900 dark:text-emerald-300'
+                          : 'border-zinc-200 dark:border-zinc-700 focus:ring-zinc-400'
+                      }`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Error Alert if any */}
-        {errorMessage && (
-          <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-md text-xs text-red-700 dark:text-red-300 flex items-start gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
-
-        {/* Lightweight Outreach Confirmation Banner */}
-        {whatsAppOpenedBanner && (
-          <div className="p-4 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-300 dark:border-zinc-700 rounded-md space-y-3 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-sm">
-              <Send className="w-4 h-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} />
-              <span>WhatsApp conversation opened</span>
+          {/* Error Alert if any */}
+          {errorMessage && (
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-start gap-2 animate-in fade-in">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+              <span>{errorMessage}</span>
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-              Once you have reviewed and clicked Send inside WhatsApp, mark this lead as contacted:
-            </p>
-            <div className="flex items-center gap-2 pt-1">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleConfirmContacted}
-                icon={<Check className="w-4 h-4" strokeWidth={1.5} />}
-                className="text-xs font-semibold"
-              >
-                Mark as Contacted
-              </Button>
+          )}
+
+          {/* Outreach Confirmation Banner */}
+          {whatsAppOpenedBanner && (
+            <div className="p-4 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-300 dark:border-zinc-700 rounded-xl space-y-3 animate-in fade-in zoom-in-95 duration-150 shadow-sm">
+              <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-sm">
+                <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />
+                <span>WhatsApp conversation opened</span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                Once you have reviewed and sent the message inside WhatsApp, confirm this lead's outreach:
+              </p>
+              <div className="flex items-center gap-2 pt-1">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleConfirmContacted}
+                  icon={<Check className="w-4 h-4" strokeWidth={1.5} />}
+                  className="text-xs font-semibold shadow-xs"
+                >
+                  Mark as Contacted
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setWhatsAppOpenedBanner(false)}
+                  className="text-xs"
+                >
+                  Not Yet
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 4: Message Workspace */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
+                <span>Personalized WhatsApp Message</span>
+              </label>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setWhatsAppOpenedBanner(false)}
-                className="text-xs"
+                onClick={handleCopyMessage}
+                icon={
+                  copiedMessage ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  )
+                }
+                className="text-xs shadow-2xs hover:border-zinc-400 active:scale-95"
+                title="Copy current message to clipboard (Keyboard: C)"
               >
-                Not Yet
+                {copiedMessage ? 'Copied' : 'Copy Message'}
               </Button>
             </div>
-          </div>
-        )}
 
-        {/* SECTION 4: Message Workspace */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-zinc-600 dark:text-zinc-400" strokeWidth={1.5} />
-              <span>Personalized WhatsApp Message</span>
-            </label>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyMessage}
-              icon={copiedMessage ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} /> : <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />}
-              className="text-xs"
-              title="Copy current message to clipboard (Keyboard: C)"
-            >
-              {copiedMessage ? 'Copied' : 'Copy Message'}
-            </Button>
-          </div>
-
-          {/* Template Selection Bar */}
-          <div className="flex items-center gap-2 p-2 rounded-md bg-zinc-100 dark:bg-zinc-800/70 border border-zinc-200 dark:border-zinc-700">
-            <span className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 shrink-0 flex items-center gap-1">
-              <FileText className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
-              Template:
-            </span>
-            <select
-              data-testid="lead-template-select"
-              value={selectedTemplateId}
-              onChange={(e) => handleApplyTemplate(e.target.value)}
-              className="flex-1 text-xs py-1 px-2.5 rounded-md border border-zinc-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate"
-            >
-
-              <option value="">Choose a template to apply...</option>
-              {templates.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} {t.isDefault ? '(Default)' : ''}
-                </option>
-              ))}
-            </select>
-            {selectedTemplateId && (
-              <button
-                type="button"
-                onClick={() => handleApplyTemplate(selectedTemplateId)}
-                className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 shrink-0"
-                title="Re-apply this template"
+            {/* Template Selection Bar */}
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-zinc-100/90 dark:bg-zinc-800/70 border border-zinc-200 dark:border-zinc-700">
+              <span className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 shrink-0 flex items-center gap-1">
+                <FileText className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
+                Template:
+              </span>
+              <select
+                data-testid="lead-template-select"
+                value={selectedTemplateId}
+                onChange={(e) => handleApplyTemplate(e.target.value)}
+                className="flex-1 text-xs py-1 px-2.5 rounded-md border border-zinc-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate cursor-pointer shadow-2xs"
               >
-                Re-apply
-              </button>
+                <option value="">Choose a template to apply...</option>
+                {templates.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name} {t.isDefault ? '(Default)' : ''}
+                  </option>
+                ))}
+              </select>
+              {selectedTemplateId && (
+                <button
+                  type="button"
+                  onClick={() => handleApplyTemplate(selectedTemplateId)}
+                  className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 shrink-0 transition-all active:scale-95 shadow-2xs"
+                  title="Re-apply this template"
+                >
+                  Re-apply
+                </button>
+              )}
+            </div>
+
+            <textarea
+              rows={7}
+              value={currentMessage}
+              onChange={(e) => handleMessageChange(e.target.value)}
+              placeholder="Type or edit personalized message..."
+              className="w-full p-3.5 text-xs leading-relaxed font-mono bg-zinc-50/80 dark:bg-zinc-800/80 border border-zinc-250 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10 focus:border-zinc-400 dark:focus:border-zinc-500 focus:bg-white dark:focus:bg-zinc-850 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 shadow-2xs resize-y"
+            />
+
+            <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 px-1">
+              <span className="font-mono tabular-nums">
+                {currentMessage.length} characters • {currentMessage.split(/\s+/).filter(Boolean).length} words
+              </span>
+              <span>Edits are saved automatically</span>
+            </div>
+          </div>
+
+          {/* SECTION 5: Activity & Notes */}
+          <div className="space-y-4 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+            {/* Notes Area */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-zinc-500 dark:text-zinc-400" strokeWidth={1.5} />
+                <span>Client Notes</span>
+              </label>
+              <textarea
+                rows={3}
+                value={notes}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                placeholder="Add client follow-up notes, objections, quote details, or discussion summary..."
+                className="w-full p-3 text-xs bg-zinc-50/80 dark:bg-zinc-800/80 border border-zinc-250 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10 focus:border-zinc-400 dark:focus:border-zinc-500 focus:bg-white dark:focus:bg-zinc-850 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 shadow-2xs resize-y"
+              />
+            </div>
+
+            {/* Activity Timeline */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <History className="w-4 h-4 text-zinc-500 dark:text-zinc-400" strokeWidth={1.5} />
+                <span>Activity History</span>
+              </label>
+
+              <div className="p-3 bg-zinc-50/80 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-700/80 text-xs space-y-2 font-mono">
+                <div className="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
+                  <span>Created / Imported</span>
+                  <span>
+                    {new Date(lead.createdAt).toLocaleDateString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </span>
+                </div>
+
+                {lead.contactedAt && (
+                  <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
+                    <span>First Contacted ({contactAttempts} attempts)</span>
+                    <span>
+                      {new Date(lead.contactedAt).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.lastContactedAt && lead.lastContactedAt !== lead.contactedAt && (
+                  <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
+                    <span>Last Contacted</span>
+                    <span>
+                      {new Date(lead.lastContactedAt).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.repliedAt && (
+                  <div className="flex items-center justify-between text-amber-700 dark:text-amber-400">
+                    <span>Replied</span>
+                    <span>
+                      {new Date(lead.repliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.demoSentAt && (
+                  <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
+                    <span>Demo Sent</span>
+                    <span>
+                      {new Date(lead.demoSentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.wonAt && (
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                    <span>Deal Won</span>
+                    <span>
+                      {new Date(lead.wonAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.lostAt && (
+                  <div className="flex items-center justify-between text-rose-600 dark:text-rose-400">
+                    <span>Closed Lost</span>
+                    <span>
+                      {new Date(lead.lostAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+                {lead.followUpDate && (
+                  <div className="flex items-center justify-between text-zinc-900 dark:text-zinc-100 font-bold">
+                    <span>Follow-up Scheduled</span>
+                    <span>
+                      {formatFollowUpDisplay(lead.followUpDate)} ({lead.followUpDate})
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sticky Footer with CTAs & Shortcuts */}
+        <div className="sticky bottom-0 z-10 p-4 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-t border-zinc-200 dark:border-zinc-800 space-y-2">
+          <div className="flex items-center gap-3">
+            {/* Main Open WhatsApp CTA */}
+            <button
+              type="button"
+              onClick={handleOpenWhatsApp}
+              disabled={!phoneValidation.valid || !currentMessage.trim()}
+              title={phoneValidation.valid ? 'Open WhatsApp Web in new tab (Keyboard: O)' : phoneValidation.error}
+              className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all select-none active:scale-[0.98] shadow-sm ${
+                phoneValidation.valid && currentMessage.trim()
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer shadow-emerald-600/20'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 border border-zinc-200 dark:border-zinc-750 cursor-not-allowed'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" strokeWidth={1.8} />
+              <span>Open WhatsApp</span>
+            </button>
+
+            {/* Quick Mark Contacted Button */}
+            {lead.status !== 'Contacted' ? (
+              <Button
+                variant="outline"
+                size="md"
+                onClick={() => onMarkContacted(lead.id)}
+                icon={<Check className="w-4 h-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.8} />}
+                className="py-3 px-3 text-xs rounded-xl shadow-2xs hover:border-zinc-400 active:scale-95"
+                title="Mark as contacted without opening WhatsApp (Keyboard: M)"
+              >
+                Mark Contacted
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="md"
+                onClick={() => onMarkContacted(lead.id)}
+                icon={<CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" strokeWidth={1.8} />}
+                className="py-3 px-3 text-xs rounded-xl text-emerald-700 dark:text-emerald-300 border-emerald-500/20 bg-emerald-500/10 shadow-2xs active:scale-95"
+                title="Log another contact attempt"
+              >
+                Attempt #{contactAttempts + 1}
+              </Button>
             )}
           </div>
 
-          <textarea
-
-            rows={7}
-            value={currentMessage}
-            onChange={(e) => handleMessageChange(e.target.value)}
-            placeholder="Type or edit personalized message..."
-            className="w-full p-3.5 text-xs leading-relaxed font-mono bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-300 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 focus:bg-white dark:focus:bg-zinc-800 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 shadow-2xs"
-          />
-
-          <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 px-1">
-            <span className="font-mono">{currentMessage.length} characters • {currentMessage.split(/\s+/).filter(Boolean).length} words</span>
-            <span>Edits are saved automatically</span>
-          </div>
-        </div>
-
-        {/* SECTION 5: Activity & Notes */}
-        <div className="space-y-3.5 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-          {/* Notes Area */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-zinc-500 dark:text-zinc-400" strokeWidth={1.5} />
-              <span>Client Notes</span>
-            </label>
-            <textarea
-              rows={3}
-              value={notes}
-              onChange={(e) => handleNotesChange(e.target.value)}
-              placeholder="Add client follow-up notes, objections, quote details, or discussion summary..."
-              className="w-full p-3 text-xs bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-300 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 focus:bg-white dark:focus:bg-zinc-800 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 shadow-2xs"
-            />
-          </div>
-
-          {/* Activity Timeline */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <History className="w-4 h-4 text-zinc-500 dark:text-zinc-400" strokeWidth={1.5} />
-              <span>Activity History</span>
-            </label>
-
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-md border border-zinc-200 dark:border-zinc-700/80 text-xs space-y-2 font-mono">
-              <div className="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
-                <span>Created / Imported</span>
-                <span>{new Date(lead.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-              </div>
-
-              {lead.contactedAt && (
-                <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
-                  <span>First Contacted ({contactAttempts} attempts)</span>
-                  <span>{new Date(lead.contactedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-              )}
-
-              {lead.lastContactedAt && lead.lastContactedAt !== lead.contactedAt && (
-                <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
-                  <span>Last Contacted</span>
-                  <span>{new Date(lead.lastContactedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-              )}
-
-              {lead.repliedAt && (
-                <div className="flex items-center justify-between text-amber-700 dark:text-amber-400">
-                  <span>Replied</span>
-                  <span>{new Date(lead.repliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-                </div>
-              )}
-
-              {lead.demoSentAt && (
-                <div className="flex items-center justify-between text-zinc-700 dark:text-zinc-300">
-                  <span>Demo Sent</span>
-                  <span>{new Date(lead.demoSentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-                </div>
-              )}
-
-              {lead.wonAt && (
-                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                  <span>Deal Won</span>
-                  <span>{new Date(lead.wonAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-                </div>
-              )}
-
-              {lead.lostAt && (
-                <div className="flex items-center justify-between text-rose-600 dark:text-rose-400">
-                  <span>Closed Lost</span>
-                  <span>{new Date(lead.lostAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-                </div>
-              )}
-
-              {lead.followUpDate && (
-                <div className="flex items-center justify-between text-zinc-900 dark:text-zinc-100 font-bold">
-                  <span>Follow-up Scheduled</span>
-                  <span>{formatFollowUpDisplay(lead.followUpDate)} ({lead.followUpDate})</span>
-                </div>
-              )}
-            </div>
+          {/* Keyboard Shortcuts Hint Bar */}
+          <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 pt-0.5 px-1">
+            <span className="flex items-center gap-1.5 flex-wrap">
+              <Keyboard className="w-3 h-3 text-zinc-400" strokeWidth={1.5} />
+              <span>
+                Shortcuts:{' '}
+                <kbd className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded font-mono text-[10px]">
+                  O
+                </kbd>{' '}
+                WhatsApp •{' '}
+                <kbd className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded font-mono text-[10px]">
+                  C
+                </kbd>{' '}
+                Copy •{' '}
+                <kbd className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded font-mono text-[10px]">
+                  M
+                </kbd>{' '}
+                Contacted •{' '}
+                <kbd className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded font-mono text-[10px]">
+                  N
+                </kbd>{' '}
+                Next •{' '}
+                <kbd className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded font-mono text-[10px]">
+                  Esc
+                </kbd>{' '}
+                Close
+              </span>
+            </span>
+            <span className="hidden sm:inline">Never sends automatically</span>
           </div>
         </div>
       </div>
-
-      {/* Footer with Primary Open WhatsApp CTA */}
-      <div className="p-4 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 space-y-2">
-        <div className="flex items-center gap-3">
-          {/* Main Open WhatsApp CTA */}
-          <button
-            type="button"
-            onClick={handleOpenWhatsApp}
-            disabled={!phoneValidation.valid || !currentMessage.trim()}
-            title={phoneValidation.valid ? 'Open WhatsApp Web in new tab (Keyboard: O)' : phoneValidation.error}
-            className={`flex-1 py-3 px-4 rounded-md font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all select-none active:scale-[0.99] ${
-              phoneValidation.valid && currentMessage.trim()
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer'
-                : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed'
-            }`}
-          >
-            <MessageSquare className="w-4 h-4" strokeWidth={1.5} />
-            <span>Open WhatsApp</span>
-          </button>
-
-          {/* Quick Mark Contacted Button */}
-          {lead.status !== 'Contacted' ? (
-            <Button
-              variant="outline"
-              size="md"
-              onClick={() => onMarkContacted(lead.id)}
-              icon={<Check className="w-4 h-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} />}
-              className="py-3 px-3 text-xs"
-              title="Mark as contacted without opening WhatsApp (Keyboard: M)"
-            >
-              Mark Contacted
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="md"
-              onClick={() => onMarkContacted(lead.id)}
-              icon={<CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />}
-              className="py-3 px-3 text-xs text-emerald-700 dark:text-emerald-300 border-emerald-500/20 bg-emerald-500/10"
-              title="Log another contact attempt"
-            >
-              Attempt #{contactAttempts + 1}
-            </Button>
-          )}
-        </div>
-
-        {/* Keyboard Shortcuts Hint */}
-        <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 pt-1 px-1">
-          <span className="flex items-center gap-1">
-            <Keyboard className="w-3 h-3" strokeWidth={1.5} />
-            <span>Shortcuts: <kbd className="px-1 py-0.5 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded text-[10px]">O</kbd> WhatsApp • <kbd className="px-1 py-0.5 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded text-[10px]">C</kbd> Copy • <kbd className="px-1 py-0.5 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded text-[10px]">M</kbd> Contacted • <kbd className="px-1 py-0.5 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded text-[10px]">N</kbd> Next</span>
-          </span>
-          <span>Never sends automatically</span>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };

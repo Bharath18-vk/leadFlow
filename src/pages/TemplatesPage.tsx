@@ -13,6 +13,9 @@ import {
   User,
   ExternalLink,
   MessageSquare,
+  Sparkles,
+  Layers,
+  X,
 } from 'lucide-react';
 import type { Lead } from '../types/lead';
 import {
@@ -43,12 +46,12 @@ const CATEGORY_LABELS: Record<TemplateCategory, string> = {
   custom: 'Custom',
 };
 
-const CATEGORY_COLORS: Record<TemplateCategory, string> = {
-  discovery: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700',
-  social_proof: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700',
-  direct: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700',
-  followup: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700',
-  custom: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700',
+const CATEGORY_BADGES: Record<TemplateCategory, string> = {
+  discovery: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
+  social_proof: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
+  direct: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
+  followup: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
+  custom: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
 };
 
 export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
@@ -88,7 +91,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
       setEditingContent(activeTemplate.content);
       setIsDirty(false);
     }
-  }, [activeTemplate?.id]);
+  }, [activeTemplate]);
 
   // Lead for preview
   const previewLead = useMemo(() => {
@@ -174,14 +177,14 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
     setTemplates(updated);
     saveTemplates(updated);
     setIsDirty(false);
-    showFeedback('Template saved successfully!');
+    showFeedback('Template saved successfully');
   };
 
   // Set active default
   const handleSetDefault = (id: string) => {
     const updated = setDefaultTemplate(id);
     setTemplates(updated);
-    showFeedback('Set as active default outreach template!');
+    showFeedback('Set as active default outreach template');
   };
 
   // Create new template
@@ -202,7 +205,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
     setTemplates(updated);
     saveTemplates(updated);
     setSelectedTemplateId(newId);
-    showFeedback('New template created! Customize it in the editor.');
+    showFeedback('New template created');
   };
 
   // Duplicate template
@@ -247,26 +250,26 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
 
   // Reset all to defaults
   const handleResetDefaults = () => {
-    if (window.confirm('Reset all templates to factory defaults? Any custom templates will be overwritten.')) {
+    if (window.confirm('Reset all templates to factory defaults? Any custom templates will be replaced.')) {
       const defs = resetTemplates();
       setTemplates(defs);
       setSelectedTemplateId(defs[0]?.id || '');
-      showFeedback('Reset to default templates!');
+      showFeedback('Reset to default templates');
     }
   };
 
-  // Copy preview
+  // Copy preview with tactile feedback
   const handleCopyPreview = () => {
     navigator.clipboard.writeText(renderedMessage);
     setCopiedPreview(true);
     setTimeout(() => setCopiedPreview(false), 2000);
-    showFeedback('Message copied to clipboard!');
+    showFeedback('Message copied to clipboard');
   };
 
   // WhatsApp launcher test
   const handleTestWhatsApp = () => {
     if (!previewLead.phone && !previewLead.rawPhone) {
-      showFeedback('Selected lead does not have a phone number.');
+      showFeedback('Selected lead does not have a valid phone number.');
       return;
     }
     const res = openWhatsAppChat(previewLead.phone || previewLead.rawPhone || '', renderedMessage);
@@ -288,35 +291,25 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
   }, [templates, activeCategoryFilter, searchQuery]);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 animate-in fade-in duration-200">
       {/* Top Header */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-zinc-900 dark:text-zinc-100">
-              <FileText className="w-4 h-4" strokeWidth={1.5} />
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/80 flex items-center justify-center text-zinc-900 dark:text-zinc-100 shrink-0">
+            <FileText className="w-5 h-5 text-zinc-800 dark:text-zinc-200" strokeWidth={1.75} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                Message Templates
+              </h1>
+              <span className="px-2 py-0.5 rounded-sm text-xs font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                {templates.length} Active
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                  Message Templates Studio
-                </h1>
-                <span className="px-2 py-0.5 rounded-sm text-xs font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
-                  {templates.length} Active
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Design and test outreach messages with dynamic lead variables like{' '}
-                <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-zinc-800 dark:text-zinc-200 font-mono text-[11px]">
-                  {'{{business_name}}'}
-                </code>{' '}
-                and{' '}
-                <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-zinc-800 dark:text-zinc-200 font-mono text-[11px]">
-                  {'{{rating}}'}
-                </code>
-                .
-              </p>
-            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              Personalize WhatsApp outreach using dynamic variables and test live rendering in real time.
+            </p>
           </div>
         </div>
 
@@ -326,9 +319,9 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
             variant="outline"
             size="sm"
             onClick={handleResetDefaults}
-            icon={<RotateCcw className="w-3.5 h-3.5" strokeWidth={1.5} />}
+            icon={<RotateCcw className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />}
             className="text-xs"
-            title="Reset built-in templates to default"
+            title="Reset built-in templates to factory defaults"
           >
             Reset Defaults
           </Button>
@@ -336,7 +329,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
             variant="primary"
             size="sm"
             onClick={handleCreateNew}
-            icon={<Plus className="w-4 h-4" strokeWidth={1.5} />}
+            icon={<Plus className="w-4 h-4" strokeWidth={1.75} />}
             className="text-xs font-medium"
           >
             New Template
@@ -346,8 +339,8 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
 
       {/* Floating Status Toast Feedback */}
       {statusFeedback && (
-        <div className="fixed bottom-6 right-6 z-50 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-3.5 py-2 rounded-md shadow-lg border border-zinc-800 dark:border-zinc-200 text-xs font-medium flex items-center gap-2 animate-in fade-in duration-150">
-          <Check className="w-4 h-4 text-emerald-400 dark:text-emerald-600" strokeWidth={1.5} />
+        <div className="fixed bottom-6 right-6 z-50 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 px-3.5 py-2.5 rounded-md shadow-lg border border-zinc-800 dark:border-zinc-200 text-xs font-medium flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
+          <Check className="w-4 h-4 text-emerald-400 dark:text-emerald-600" strokeWidth={2} />
           <span>{statusFeedback}</span>
         </div>
       )}
@@ -357,27 +350,36 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
         {/* ========================================================================= */}
         {/* COLUMN 1: TEMPLATES LIBRARY (4 cols on lg) */}
         {/* ========================================================================= */}
-        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4 transition-colors">
+        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-3.5 shadow-2xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
             <h2 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-              <MessageSquare className="w-4 h-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.5} />
+              <MessageSquare className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
               Template Library
             </h2>
-            <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-              {filteredTemplates.length} of {templates.length}
+            <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono">
+              {filteredTemplates.length} / {templates.length}
             </span>
           </div>
 
           {/* Search bar */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" strokeWidth={1.5} />
             <input
               type="text"
-              placeholder="Search templates..."
+              placeholder="Search templates by title or copy..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500"
+              className="w-full pl-8 pr-7 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/70 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 transition-colors"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
           {/* Category Filter Chips */}
@@ -387,10 +389,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategoryFilter(cat)}
-                className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition-colors active:scale-[0.98] ${
+                className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition-all active:scale-[0.98] ${
                   activeCategoryFilter === cat
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold'
-                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold shadow-2xs'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700/80'
                 }`}
               >
                 {cat === 'all' ? 'All' : CATEGORY_LABELS[cat]}
@@ -399,10 +401,22 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
           </div>
 
           {/* Templates Cards List */}
-          <div className="space-y-2.5 max-h-[600px] overflow-y-auto pr-0.5">
+          <div className="space-y-2 max-h-[580px] overflow-y-auto pr-0.5">
             {filteredTemplates.length === 0 ? (
-              <div className="text-center py-8 text-xs text-zinc-400 dark:text-zinc-500">
-                No templates found matching your search.
+              <div className="text-center py-10 px-4 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  No templates match your search or filter.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategoryFilter('all');
+                  }}
+                  className="mt-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100 underline underline-offset-2"
+                >
+                  Clear filters
+                </button>
               </div>
             ) : (
               filteredTemplates.map((t) => {
@@ -411,20 +425,20 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   <div
                     key={t.id}
                     onClick={() => setSelectedTemplateId(t.id)}
-                    className={`group relative p-3 rounded-lg border cursor-pointer transition-colors ${
+                    className={`group relative p-3 rounded-lg border cursor-pointer transition-all ${
                       isSelected
-                        ? 'border-zinc-900 dark:border-zinc-100 bg-zinc-50 dark:bg-zinc-800/80 shadow-xs ring-1 ring-zinc-900 dark:ring-zinc-100'
-                        : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700'
+                        ? 'border-zinc-900 dark:border-zinc-100 bg-zinc-50 dark:bg-zinc-800/80 shadow-2xs ring-1 ring-zinc-900 dark:ring-zinc-100'
+                        : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50/50 dark:hover:bg-zinc-850'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="space-y-1">
+                      <div className="space-y-1 min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                          <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 leading-tight truncate">
                             {t.name}
                           </span>
                           {t.isDefault && (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80">
                               <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
                               Default
                             </span>
@@ -432,14 +446,14 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                         </div>
                         <div className="flex items-center gap-1.5">
                           <span
-                            className={`text-[10px] px-2 py-0.5 rounded-full border font-semibold ${
-                              CATEGORY_COLORS[t.category]
+                            className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${
+                              CATEGORY_BADGES[t.category]
                             }`}
                           >
                             {CATEGORY_LABELS[t.category] || t.category}
                           </span>
                           {t.isBuiltIn && (
-                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+                            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
                               Built-in
                             </span>
                           )}
@@ -447,7 +461,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                       </div>
 
                       {/* Quick action buttons */}
-                      <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-0.5 opacity-80 group-hover:opacity-100 transition-opacity shrink-0">
                         {!t.isDefault && (
                           <button
                             type="button"
@@ -455,10 +469,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                               e.stopPropagation();
                               handleSetDefault(t.id);
                             }}
-                            className="p-1 rounded-md text-slate-400 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="p-1 rounded-md text-zinc-400 hover:text-amber-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                             title="Set as Default Template"
                           >
-                            <Star className="w-3.5 h-3.5" />
+                            <Star className="w-3.5 h-3.5" strokeWidth={1.5} />
                           </button>
                         )}
                         <button
@@ -467,10 +481,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                             e.stopPropagation();
                             handleDuplicate(t);
                           }}
-                          className="p-1 rounded-md text-slate-400 hover:text-blue-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          className="p-1 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                           title="Duplicate Template"
                         >
-                          <Copy className="w-3.5 h-3.5" />
+                          <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />
                         </button>
                         {!t.isBuiltIn && (
                           <button
@@ -479,17 +493,17 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                               e.stopPropagation();
                               handleDeleteTemplate(t.id, t.name);
                             }}
-                            className="p-1 rounded-md text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="p-1 rounded-md text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                             title="Delete Template"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                           </button>
                         )}
                       </div>
                     </div>
 
                     {/* Snippet */}
-                    <p className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 font-mono leading-relaxed">
+                    <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2 font-mono leading-relaxed">
                       {t.content}
                     </p>
                   </div>
@@ -502,10 +516,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
         {/* ========================================================================= */}
         {/* COLUMN 2: TEMPLATE EDITOR (4 cols on lg) */}
         {/* ========================================================================= */}
-        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4 transition-colors">
+        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4 shadow-2xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
             <h2 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-zinc-900 dark:text-zinc-100" strokeWidth={1.5} />
+              <FileText className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" strokeWidth={1.75} />
               Template Editor
             </h2>
             {isDirty && (
@@ -516,10 +530,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
           </div>
 
           {/* Form Fields */}
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {/* Template Name */}
             <div>
-              <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+              <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
                 Template Name
               </label>
               <input
@@ -529,15 +543,15 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setEditingName(e.target.value);
                   setIsDirty(true);
                 }}
-                placeholder="e.g. Interior Design Direct Pitch"
-                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500"
+                placeholder="e.g. Interior Design Pitch (Direct)"
+                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 transition-colors"
               />
             </div>
 
             {/* Category Select */}
             <div>
-              <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 block mb-1">
-                Category
+              <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+                Outreach Category
               </label>
               <select
                 value={editingCategory}
@@ -545,7 +559,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setEditingCategory(e.target.value as TemplateCategory);
                   setIsDirty(true);
                 }}
-                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer"
+                className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 cursor-pointer"
               >
                 <option value="discovery">Cold Discovery</option>
                 <option value="social_proof">Social Proof & Reviews</option>
@@ -555,23 +569,31 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
               </select>
             </div>
 
-            {/* Variable Insertion Pills */}
+            {/* Syntax Variable Pills */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
-                  Insert Dynamic Variables (Click to Add)
+                <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-zinc-400" />
+                  <span>Insert Variable (Click to Add)</span>
                 </label>
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
+                  {TEMPLATE_VARIABLES.length} available
+                </span>
               </div>
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1.5 p-2 rounded-md bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200/80 dark:border-zinc-800">
                 {TEMPLATE_VARIABLES.map((v) => (
                   <button
                     key={v.key}
                     type="button"
                     onClick={() => handleInsertVariable(v.key)}
-                    className="text-[10px] px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 border border-zinc-200 dark:border-zinc-700 transition-colors font-mono active:scale-[0.98]"
-                    title={`Inserts ${v.key} (${v.description})`}
+                    className="group inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-md bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700/80 transition-all font-mono active:scale-[0.97] shadow-2xs"
+                    title={`Click to insert ${v.key} (${v.description})`}
                   >
-                    + {v.label}
+                    <span className="text-zinc-400 dark:text-zinc-500 font-sans">+</span>
+                    <span className="font-semibold text-zinc-900 dark:text-zinc-100">{v.label}</span>
+                    <span className="text-[9px] text-zinc-400 dark:text-zinc-500 opacity-60 group-hover:opacity-100">
+                      {v.key}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -579,7 +601,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
 
             {/* Message Textarea */}
             <div>
-              <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-300 block mb-1">
+              <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
                 Message Body
               </label>
               <textarea
@@ -591,23 +613,23 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                   setIsDirty(true);
                 }}
                 placeholder="Write your template copy here... Use {{business_name}} and {{city}} to personalize."
-                className="w-full p-3 text-xs leading-relaxed font-mono bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:bg-white dark:focus:bg-zinc-800 transition-all text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
+                className="w-full p-3 text-xs leading-relaxed font-mono bg-zinc-50 dark:bg-zinc-800/70 border border-zinc-200 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 focus:bg-white dark:focus:bg-zinc-800 transition-all text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
               />
               <div className="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 px-1 font-mono">
                 <span>{editingContent.length} chars • {editingContent.split(/\s+/).filter(Boolean).length} words</span>
-                <span className="font-sans">Supports WhatsApp formatting (*bold*, _italic_)</span>
+                <span className="font-sans">Formatting: *bold*, _italic_, ~strike~</span>
               </div>
             </div>
 
             {/* Action buttons */}
-            <div className="pt-2 flex items-center justify-between gap-2">
+            <div className="pt-2 flex items-center justify-between gap-2 border-t border-zinc-100 dark:border-zinc-800">
               <div className="flex items-center gap-1.5">
                 <Button
                   variant="primary"
                   size="sm"
                   onClick={handleSaveTemplate}
                   icon={<Check className="w-3.5 h-3.5" />}
-                  className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white"
+                  className="text-xs font-semibold"
                 >
                   Save Template
                 </Button>
@@ -616,8 +638,8 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleSetDefault(activeTemplate.id)}
-                    icon={<Star className="w-3.5 h-3.5 text-amber-500" />}
-                    className="text-xs text-slate-700 dark:text-slate-300"
+                    icon={<Star className="w-3.5 h-3.5 text-amber-500" strokeWidth={1.5} />}
+                    className="text-xs"
                     title="Make this the default template for all new outreach"
                   >
                     Set Default
@@ -637,7 +659,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
                       setIsDirty(false);
                     }
                   }}
-                  className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400"
+                  className="text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
                 >
                   Discard
                 </Button>
@@ -649,32 +671,32 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
         {/* ========================================================================= */}
         {/* COLUMN 3: LIVE WHATSAPP SIMULATOR & TESTER (4 cols on lg) */}
         {/* ========================================================================= */}
-        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4 transition-colors">
+        <div className="lg:col-span-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-3.5 shadow-2xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
             <h2 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-              <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400" strokeWidth={1.5} />
-              Live WhatsApp Simulator
+              <Send className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.75} />
+              WhatsApp Live Preview
             </h2>
-            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-sm border border-emerald-200 dark:border-emerald-800">
-              Interactive Preview
+            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-sm border border-emerald-200 dark:border-emerald-800/80">
+              Interactive
             </span>
           </div>
 
           {/* Lead Selector for testing */}
           <div className="space-y-1">
-            <label className="text-[11px] font-medium text-zinc-600 dark:text-zinc-300 flex items-center gap-1">
-              <User className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
+            <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-zinc-400" strokeWidth={1.5} />
               <span>Preview Against Lead</span>
             </label>
             <select
               value={previewLeadId}
               onChange={(e) => setPreviewLeadId(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate"
+              className="w-full px-3 py-1.5 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400 truncate cursor-pointer"
             >
               <option value="sample">Sample Lead: Studio One Interiors (Rating: 4.8, Bangalore)</option>
               {leads.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {l.businessName} {l.city ? `(${l.city})` : ''} - {l.rating ? `Rating: ${l.rating}` : 'No rating'}
+                  {l.businessName} {l.city ? `(${l.city})` : ''} - {l.rating ? `★ ${l.rating}` : 'No rating'}
                 </option>
               ))}
             </select>
@@ -683,56 +705,59 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
           {/* WhatsApp Chat Simulator Screen */}
           <div className="rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm">
             {/* WhatsApp App Bar */}
-            <div className="bg-[#075e54] dark:bg-[#004d40] text-white px-3.5 py-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-xs text-white">
+            <div className="bg-[#008069] dark:bg-[#1f2c34] text-white px-3.5 py-2.5 flex items-center justify-between border-b border-black/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-emerald-700 dark:bg-emerald-800 flex items-center justify-center font-bold text-xs text-white shadow-2xs">
                   {previewLead.businessName?.charAt(0) || 'L'}
                 </div>
                 <div className="overflow-hidden">
-                  <div className="text-xs font-semibold truncate max-w-[170px]">
+                  <div className="text-xs font-semibold truncate max-w-[170px] text-white">
                     {previewLead.businessName}
                   </div>
-                  <div className="text-[10px] text-emerald-200 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                  <div className="text-[10px] text-emerald-100/90 dark:text-zinc-400 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 inline-block animate-pulse" />
                     <span>online</span>
                   </div>
                 </div>
               </div>
 
-              <div className="text-[10px] bg-emerald-800/80 px-2 py-0.5 rounded text-emerald-100 font-mono">
+              <div className="text-[10px] bg-black/15 dark:bg-zinc-800 px-2 py-0.5 rounded text-emerald-50 dark:text-zinc-300 font-mono">
                 {previewLead.phone || previewLead.rawPhone || 'No Phone'}
               </div>
             </div>
 
             {/* Chat Wallpaper Area */}
-            <div className="bg-[#efeae2] dark:bg-[#0b141a] p-3.5 min-h-[320px] max-h-[380px] overflow-y-auto flex flex-col justify-end transition-colors">
+            <div className="bg-[#efeae2] dark:bg-[#0b141a] p-3.5 min-h-[320px] max-h-[380px] overflow-y-auto flex flex-col justify-end transition-colors relative">
               <div className="text-center my-2">
-                <span className="text-[10px] bg-white/80 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded shadow-2xs font-mono">
+                <span className="text-[10px] bg-white/90 dark:bg-zinc-800/90 text-zinc-500 dark:text-zinc-400 px-2.5 py-0.5 rounded shadow-2xs font-mono font-medium">
                   TODAY
                 </span>
               </div>
 
-              {/* Chat Bubble (Outgoing) */}
+              {/* Chat Bubble (Outgoing) with authentic WhatsApp styling */}
               <div
                 data-testid="whatsapp-chat-bubble"
-                className="self-end max-w-[92%] bg-[#d9fdd3] dark:bg-[#005c4b] text-zinc-900 dark:text-zinc-100 rounded-lg rounded-tr-xs p-3 text-xs whitespace-pre-wrap leading-relaxed transition-colors"
+                className="self-end max-w-[92%] bg-[#d9fdd3] dark:bg-[#005c4b] text-zinc-900 dark:text-zinc-100 rounded-2xl rounded-tr-xs p-3.5 text-xs whitespace-pre-wrap leading-relaxed shadow-2xs transition-colors"
               >
-                <p className="font-sans break-words">{renderedMessage || '(No message content)'}</p>
+                <p className="font-sans break-words selection:bg-emerald-300 selection:text-zinc-900">
+                  {renderedMessage || '(No message content)'}
+                </p>
 
-                <div className="flex items-center justify-end gap-1 mt-1.5 text-[10px] text-zinc-500 dark:text-emerald-200/70">
+                <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-zinc-500 dark:text-emerald-200/80 font-mono select-none">
                   <span>10:42 AM</span>
-                  <CheckCheck className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-300" strokeWidth={1.5} />
+                  <CheckCheck className="w-3.5 h-3.5 text-[#53bdeb] dark:text-[#53bdeb]" strokeWidth={1.75} />
                 </div>
               </div>
             </div>
 
             {/* Chat Bottom Bar */}
-            <div className="bg-zinc-100 dark:bg-zinc-800 px-3 py-2 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between text-xs">
-              <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                Rendered with live lead attributes
+            <div className="bg-zinc-100 dark:bg-zinc-800/90 px-3 py-2 border-t border-zinc-200 dark:border-zinc-700/80 flex items-center justify-between text-xs">
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center gap-1 font-mono">
+                <Layers className="w-3 h-3 text-zinc-400" />
+                Live Attributes Rendered
               </span>
-              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-medium">
-                Ready to send
+              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                Ready to Send
               </span>
             </div>
           </div>
@@ -743,24 +768,32 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({ leads }) => {
               variant="outline"
               size="sm"
               onClick={handleCopyPreview}
-              icon={copiedPreview ? <Check className="w-3.5 h-3.5 text-emerald-600" strokeWidth={1.5} /> : <Copy className="w-3.5 h-3.5" strokeWidth={1.5} />}
-              className="text-xs"
+              icon={
+                copiedPreview ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 scale-110 transition-transform" strokeWidth={2} />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
+                )
+              }
+              className={`text-xs transition-colors ${
+                copiedPreview ? 'border-emerald-500/50 text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30' : ''
+              }`}
             >
-              {copiedPreview ? 'Copied' : 'Copy Message'}
+              {copiedPreview ? 'Copied!' : 'Copy Message'}
             </Button>
             <Button
               variant="primary"
               size="sm"
               onClick={handleTestWhatsApp}
-              icon={<ExternalLink className="w-3.5 h-3.5" />}
-              className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+              icon={<ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />}
+              className="text-xs bg-[#25D366] hover:bg-[#20ba59] text-zinc-950 font-semibold shadow-2xs border border-emerald-600/20"
             >
               Test WhatsApp
             </Button>
           </div>
 
-          <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed font-mono">
-            <strong className="text-zinc-700 dark:text-zinc-300 font-sans">Pro Tip:</strong> When you set a template as Default, new leads and outreach queue items will automatically pre-populate with that template.
+          <div className="p-3 rounded-md bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed font-mono">
+            <strong className="text-zinc-800 dark:text-zinc-200 font-sans">Pro Tip:</strong> Default template automatically populates throughout lead detail views, quick outreach queues, and batch actions.
           </div>
         </div>
       </div>
