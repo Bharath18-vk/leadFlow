@@ -62,6 +62,10 @@ function RevealOnScroll({ children, delay = 0, className = '' }: { children: Rea
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      setVisible(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -69,11 +73,20 @@ function RevealOnScroll({ children, delay = 0, className = '' }: { children: Rea
           observer.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.05, rootMargin: '60px' }
     );
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+
+    // Safety fallback: ensure visibility if observer is throttled or delayed
+    const timer = setTimeout(() => {
+      setVisible(true);
+    }, 1000 + delay);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
+  }, [delay]);
 
   return (
     <div
@@ -221,8 +234,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
         <div className="relative z-10 text-center max-w-4xl mx-auto">
           {/* Badge */}
           <div
-            className="inline-flex items-center gap-2 bg-zinc-900/80 border border-zinc-700/60 rounded-full px-3.5 py-1.5 mb-8 text-xs text-zinc-400 backdrop-blur-sm"
-            style={{ animation: 'fade-up 0.5s ease-out 0.1s forwards', opacity: 0 }}
+            className="animate-fade-up inline-flex items-center gap-2 bg-zinc-900/80 border border-zinc-700/60 rounded-full px-3.5 py-1.5 mb-8 text-xs text-zinc-400 backdrop-blur-sm"
+            style={{ animationDelay: '100ms' }}
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -233,8 +246,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
           {/* Headline */}
           <h1
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6"
-            style={{ animation: 'fade-up 0.55s ease-out 0.2s forwards', opacity: 0 }}
+            className="animate-fade-up text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6"
+            style={{ animationDelay: '200ms' }}
           >
             Your WhatsApp outreach,
             <br />
@@ -243,8 +256,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
           {/* Sub */}
           <p
-            className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
-            style={{ animation: 'fade-up 0.55s ease-out 0.35s forwards', opacity: 0 }}
+            className="animate-fade-up text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+            style={{ animationDelay: '350ms' }}
           >
             Import leads from Excel, score them automatically, and send personalized WhatsApp messages in bulk -
             all from a single, beautifully designed CRM that lives in your browser.
@@ -252,12 +265,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
           {/* CTA group */}
           <div
-            className="flex flex-col sm:flex-row gap-3 justify-center items-center"
-            style={{ animation: 'fade-up 0.55s ease-out 0.5s forwards', opacity: 0 }}
+            className="animate-fade-up flex flex-col sm:flex-row gap-3 justify-center items-center"
+            style={{ animationDelay: '500ms' }}
           >
             <button
               onClick={onEnter}
-              className="btn-glow group flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold px-7 py-3.5 rounded-lg text-base transition-all duration-200 active:scale-[0.97] shadow-2xl shadow-emerald-500/30"
+              className="btn-glow group flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold px-7 py-3.5 rounded-lg text-base transition-all duration-200 active:scale-[0.97] shadow-2xl shadow-emerald-500/30 cursor-pointer"
             >
               <Send className="w-4 h-4" />
               Start for Free
@@ -265,7 +278,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
             </button>
             <button
               onClick={onEnter}
-              className="flex items-center gap-2 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-medium px-6 py-3.5 rounded-lg text-base transition-all duration-200 active:scale-[0.97]"
+              className="flex items-center gap-2 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-medium px-6 py-3.5 rounded-lg text-base transition-all duration-200 active:scale-[0.97] cursor-pointer"
             >
               View Demo Data
             </button>
@@ -273,8 +286,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
           {/* Trust badges */}
           <div
-            className="mt-10 flex flex-wrap justify-center gap-5 text-xs text-zinc-500"
-            style={{ animation: 'fade-up 0.55s ease-out 0.65s forwards', opacity: 0 }}
+            className="animate-fade-up mt-10 flex flex-wrap justify-center gap-5 text-xs text-zinc-500"
+            style={{ animationDelay: '650ms' }}
           >
             {['No sign-up required', 'No cloud storage', 'No monthly fees', 'Works offline'].map((t) => (
               <span key={t} className="flex items-center gap-1.5">
@@ -287,8 +300,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnter }) => {
 
         {/* Hero app mockup - decorative */}
         <div
-          className="relative z-10 mt-16 w-full max-w-4xl mx-auto"
-          style={{ animation: 'fade-up 0.7s ease-out 0.8s forwards', opacity: 0 }}
+          className="animate-fade-up relative z-10 mt-16 w-full max-w-4xl mx-auto"
+          style={{ animationDelay: '800ms' }}
         >
           <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-xl overflow-hidden shadow-2xl shadow-black/50 backdrop-blur-sm">
             {/* Fake window chrome */}
