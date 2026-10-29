@@ -1,25 +1,29 @@
 import type { Lead, LeadTier, LeadStatus } from '../types/lead';
 
 // Helper to normalize header keys for matching
-function cleanKey(key: string): string {
-  return key.toLowerCase().replace(/[^a-z0-9]/g, '');
+function cleanKey(key: any): string {
+  return String(key || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 export function findMatchingField(row: Record<string, any>, candidateKeys: string[]): any {
   const rowKeys = Object.keys(row);
   const normalizedCandidateKeys = candidateKeys.map(cleanKey);
 
+  // 1. Exact match first
   for (const rKey of rowKeys) {
     const cleanedRKey = cleanKey(rKey);
+    if (!cleanedRKey) continue;
     if (normalizedCandidateKeys.includes(cleanedRKey)) {
       return row[rKey];
     }
   }
 
-  // Substring match fallback for tricky nested or prefixed keys
+  // 2. Substring match fallback for tricky nested or prefixed keys (prevent short/empty false matches)
   for (const rKey of rowKeys) {
     const cleanedRKey = cleanKey(rKey);
+    if (cleanedRKey.length < 3) continue;
     for (const cand of normalizedCandidateKeys) {
+      if (cand.length < 3) continue;
       if (cleanedRKey.includes(cand) || cand.includes(cleanedRKey)) {
         return row[rKey];
       }
@@ -127,22 +131,30 @@ export function generateSmartMessage(lead: {
     introSocialProof = ` and had a look at your ${category} work.`;
   }
 
-  return `Hello,\n\nI came across ${name} on Google${introSocialProof}\n\nI am a freelance web developer, and I noticed you do not currently have a dedicated website. For an interior-design business, a clean website can turn your project photos into a proper portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI prepared an idea for a website concept for ${name}.\n\nWould you like me to send you a quick demo?`;
+  return `Hello,\n\nI came across ${name} on Google${introSocialProof}\n\nI am a freelance web developer, and I noticed you do not currently have a dedicated website. For a ${category} business, a clean website can showcase your portfolio and make it easier for potential clients to understand your services and contact you directly on WhatsApp.\n\nI prepared an idea for a website concept for ${name}.\n\nWould you like me to send you a quick demo?`;
 }
 
 export function normalizeRawRow(
   row: Record<string, any>,
   importSource: string,
-  rowIndex: number
+  rowIndex: number,
+  defaultLocationHint?: string
 ): { lead: Lead | null; error?: string } {
   // 1. Business Name (mandatory)
   const rawName = findMatchingField(row, [
+    'business',
     'business name',
     'business_name',
+    'businessname',
     'name',
     'title',
     'company',
+    'company name',
+    'company_name',
     'shop name',
+    'store name',
+    'place name',
+    'lead name',
   ]);
 
   const businessName = rawName ? String(rawName).trim() : '';
@@ -157,6 +169,9 @@ export function normalizeRawRow(
     'mobile',
     'contact',
     'tel',
+    'telephone',
+    'cell',
+    'whatsapp',
     'phoneunformatted',
     'mobile number',
   ]);
@@ -169,11 +184,14 @@ export function normalizeRawRow(
     'categories/0',
     'type',
     'subtitle',
+    'profession',
+    'service',
+    'industry',
   ]);
-  const category = rawCategory ? String(rawCategory).trim() : 'Interior Designer';
+  const category = rawCategory ? String(rawCategory).trim() : 'General Business';
 
   // 4. Rating & Reviews
-  const rawRating = findMatchingField(row, ['rating', 'totalscore', 'score', 'stars']);
+  const rawRating = findMatchingField(row, ['rating', 'totalscore', 'score', 'stars', 'star']);
   const parsedRating = parseFloat(rawRating);
   const rating = !isNaN(parsedRating) ? Math.min(5, Math.max(0, parsedRating)) : 0;
 
@@ -198,19 +216,20 @@ export function normalizeRawRow(
   const images = !isNaN(parsedImages) ? Math.max(0, parsedImages) : 0;
 
   // 6. City, Neighborhood, Address
-  const rawCity = findMatchingField(row, ['city', 'location/city', 'town']);
-  const city = rawCity ? String(rawCity).trim() : 'Bengaluru';
-
-  const rawNeighborhood = findMatchingField(row, ['neighborhood', 'area', 'locality']);
-  const neighborhood = rawNeighborhood ? String(rawNeighborhood).trim() : undefined;
-
+  const rawCity = findMatchingField(row, ['city', 'location/city', 'town', 'district']);
+  const rawNeighborhood = findMatchingField(row, ['neighborhood', 'area', 'locality', 'suburb', 'zone']);
   const rawAddress = findMatchingField(row, [
     'address',
     'formatted_address',
     'street',
     'full address',
   ]);
+  const neighborhood = rawNeighborhood ? String(rawNeighborhood).trim() : undefined;
   const address = rawAddress ? String(rawAddress).trim() : undefined;
+
+  const city = rawCity
+    ? String(rawCity).trim()
+    : (defaultLocationHint || (neighborhood ? neighborhood : 'Bengaluru'));
 
   // 7. Place ID & Maps URL
   const rawPlaceId = findMatchingField(row, ['placeid', 'place_id', 'place id']);
@@ -218,7 +237,10 @@ export function normalizeRawRow(
 
   const rawMapsUrl = findMatchingField(row, [
     'google maps url',
+    'google maps',
     'maps url',
+    'maps',
+    'map url',
     'url',
     'searchpageurl',
   ]);
@@ -226,7 +248,7 @@ export function normalizeRawRow(
 
   // 8. Lead Score & Tier: PRESERVE IF PRESENT
   const rawScore = findMatchingField(row, ['lead score', 'lead_score']);
-  const rawTier = findMatchingField(row, ['lead tier', 'lead_tier', 'tier']);
+  const rawTier = findMatchingField(row, ['lead tier', 'lead_tier', 'tier', 'review tier', 'review_tier', 'rating tier']);
 
   let leadScore: number;
   const parsedScore = parseFloat(rawScore);
@@ -276,6 +298,7 @@ export function normalizeRawRow(
   if (rawStatus) {
     const s = String(rawStatus).trim().toLowerCase();
     if (s === 'contacted' || s === 'yes' || s === 'true') status = 'Contacted';
+    else if (s === 'not contacted' || s === 'no' || s === 'false' || s === 'new') status = 'New';
     else if (s === 'replied') status = 'Replied';
     else if (s === 'demo sent') status = 'Demo Sent';
     else if (s === 'interested') status = 'Interested';

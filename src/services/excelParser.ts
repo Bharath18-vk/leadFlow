@@ -3,6 +3,161 @@ import type { Lead, ImportSummary } from '../types/lead';
 import { normalizeRawRow } from './leadNormalizer';
 import { isDuplicate } from './duplicateDetector';
 
+const NAME_KEYWORDS = [
+  'business', 'businessname', 'name', 'company', 'companyname',
+  'title', 'shop', 'shopname', 'store', 'storename', 'lead', 'place'
+];
+const CONTACT_KEYWORDS = ['phone', 'mobile', 'contact', 'tel', 'cell', 'telephone', 'whatsapp'];
+const OTHER_HEADER_KEYWORDS = [
+  'rating', 'reviews', 'category', 'area', 'city', 'address', 'location',
+  'status', 'notes', 'tier', 'maps', 'website', 'photos', 'images', 'rank'
+];
+
+function cleanHeaderKey(key: any): string {
+  return String(key || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function extractLocationFromText(text: any): string | undefined {
+  if (!text) return undefined;
+  const str = String(text).toLowerCase();
+  const knownCities = [
+    { pattern: 'avadi', name: 'Avadi, Chennai' },
+    { pattern: 'chennai', name: 'Chennai' },
+    { pattern: 'bengaluru', name: 'Bengaluru' },
+    { pattern: 'bangalore', name: 'Bengaluru' },
+    { pattern: 'mumbai', name: 'Mumbai' },
+    { pattern: 'delhi', name: 'Delhi' },
+    { pattern: 'hyderabad', name: 'Hyderabad' },
+    { pattern: 'kolkata', name: 'Kolkata' },
+    { pattern: 'pune', name: 'Pune' },
+    { pattern: 'ahmedabad', name: 'Ahmedabad' },
+    { pattern: 'jaipur', name: 'Jaipur' },
+    { pattern: 'coimbatore', name: 'Coimbatore' },
+    { pattern: 'kochi', name: 'Kochi' },
+    { pattern: 'surat', name: 'Surat' },
+    { pattern: 'lucknow', name: 'Lucknow' },
+    { pattern: 'chandigarh', name: 'Chandigarh' },
+    { pattern: 'noida', name: 'Noida' },
+    { pattern: 'gurgaon', name: 'Gurugram' },
+    { pattern: 'gurugram', name: 'Gurugram' },
+  ];
+  for (const { pattern, name } of knownCities) {
+    if (str.includes(pattern)) {
+      return name;
+    }
+  }
+  return undefined;
+}
+
+function detectHeaderRowAndContext(
+  grid: any[][],
+  fileName = ''
+): { headerRowIndex: number; locationHint?: string } {
+  let bestRowIndex = 0;
+  let maxScore = -1;
+  let locationHint = extractLocationFromText(fileName);
+
+  const maxScan = Math.min(grid.length, 35);
+  for (let r = 0; r < maxScan; r++) {
+    const row = grid[r];
+    if (!Array.isArray(row) || row.length === 0) continue;
+
+    let score = 0;
+    let hasName = false;
+    let hasContact = false;
+
+    if (!locationHint) {
+      for (const cell of row) {
+        const found = extractLocationFromText(cell);
+        if (found) {
+          locationHint = found;
+          break;
+        }
+      }
+    }
+
+    for (const cell of row) {
+      const cleaned = cleanHeaderKey(cell);
+      if (!cleaned) continue;
+
+      if (NAME_KEYWORDS.includes(cleaned)) {
+        score += 4;
+        hasName = true;
+      } else if (CONTACT_KEYWORDS.includes(cleaned)) {
+        score += 3;
+        hasContact = true;
+      } else if (OTHER_HEADER_KEYWORDS.some((k) => cleaned === k || cleaned.includes(k))) {
+        score += 1;
+      }
+    }
+
+    if (hasName) score += 3;
+    if (hasContact) score += 3;
+
+    if (score > maxScore) {
+      maxScore = score;
+      bestRowIndex = r;
+    }
+  }
+
+  if (maxScore < 3) {
+    bestRowIndex = 0;
+  }
+
+  return { headerRowIndex: bestRowIndex, locationHint };
+}
+
+const SUMMARY_PATTERNS = [
+  'summary',
+  'total leads',
+  'average rating',
+  'average reviews',
+  'contacted or beyond',
+  'replied',
+  'meetings booked',
+  'won',
+  'confirmed no website',
+  'how to use',
+  'yellow cells',
+  'example row',
+  'review tier',
+  'caveat',
+  'excluded',
+  'data source',
+];
+
+function isSummaryOrFooterRow(rowObj: Record<string, any>, rowValues: any[]): boolean {
+  const nonBlank = rowValues.filter(
+    (v) => v !== null && v !== undefined && String(v).trim() !== ''
+  );
+  if (nonBlank.length === 0) return true;
+
+  const firstVal = cleanHeaderKey(nonBlank[0]);
+  for (const pat of SUMMARY_PATTERNS) {
+    const cleanPat = cleanHeaderKey(pat);
+    if (firstVal === cleanPat || firstVal.startsWith(cleanPat)) {
+      return true;
+    }
+  }
+
+  const nameKeys = ['business', 'business name', 'name', 'company', 'title'];
+  for (const k of Object.keys(rowObj)) {
+    const cleanedK = cleanHeaderKey(k);
+    if (nameKeys.some((nk) => cleanHeaderKey(nk) === cleanedK)) {
+      const nameVal = cleanHeaderKey(rowObj[k]);
+      if (
+        SUMMARY_PATTERNS.some(
+          (pat) => cleanHeaderKey(pat) === nameVal || nameVal.startsWith(cleanHeaderKey(pat))
+        )
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export async function parseLeadFile(
   file: File,
   existingLeads: Lead[] = []
@@ -21,11 +176,60 @@ export async function parseLeadFile(
 
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        const rawRows: Record<string, any>[] = XLSX.utils.sheet_to_json(worksheet, {
+        
+        // Parse sheet as raw 2D grid of values to auto-detect header row
+        const grid = XLSX.utils.sheet_to_json<any[]>(worksheet, {
+          header: 1,
           defval: '',
         });
 
-        if (rawRows.length === 0) {
+        if (!grid || grid.length === 0) {
+          resolve({
+            leads: [],
+            summary: {
+              totalRows: 0,
+              importedCount: 0,
+              duplicatesCount: 0,
+              missingNameCount: 0,
+              sourceName: file.name,
+              skippedRows: [],
+            },
+          });
+          return;
+        }
+
+        // Detect header row index & location hint
+        const { headerRowIndex, locationHint } = detectHeaderRowAndContext(grid, file.name);
+        const headerRow = (grid[headerRowIndex] || []).map((c) => String(c ?? '').trim());
+
+        // Extract and filter valid data rows
+        interface PreparedRow {
+          obj: Record<string, any>;
+          rowIndex: number;
+        }
+        const dataRows: PreparedRow[] = [];
+
+        for (let r = headerRowIndex + 1; r < grid.length; r++) {
+          const rowValues = grid[r] || [];
+          const hasContent = rowValues.some(
+            (v) => v !== null && v !== undefined && String(v).trim() !== ''
+          );
+          if (!hasContent) continue;
+
+          const rowObj: Record<string, any> = {};
+          headerRow.forEach((colName, cIdx) => {
+            const key = colName || `__EMPTY_${cIdx}`;
+            rowObj[key] = rowValues[cIdx] !== undefined ? rowValues[cIdx] : '';
+          });
+
+          if (isSummaryOrFooterRow(rowObj, rowValues)) {
+            continue; // Gracefully ignore notes, summary tables, and guide rows
+          }
+
+          dataRows.push({ obj: rowObj, rowIndex: r });
+        }
+
+        if (dataRows.length === 0) {
           resolve({
             leads: [],
             summary: {
@@ -50,13 +254,13 @@ export async function parseLeadFile(
 
         const importSource = `import:${file.name}`;
 
-        rawRows.forEach((row, index) => {
-          const { lead, error } = normalizeRawRow(row, importSource, index);
+        dataRows.forEach(({ obj: row, rowIndex }) => {
+          const { lead, error } = normalizeRawRow(row, importSource, rowIndex, locationHint);
 
           if (!lead) {
             missingNameCount++;
             skippedRows.push({
-              rowNumber: index + 1,
+              rowNumber: rowIndex + 1,
               businessName: 'N/A',
               reason: error || 'Missing business name',
             });
@@ -68,7 +272,7 @@ export async function parseLeadFile(
           if (batchDupCheck.duplicate) {
             duplicatesCount++;
             skippedRows.push({
-              rowNumber: index + 1,
+              rowNumber: rowIndex + 1,
               businessName: lead.businessName,
               reason: batchDupCheck.reason || 'Duplicate record within spreadsheet',
             });
@@ -115,7 +319,7 @@ export async function parseLeadFile(
         });
 
         const summary: ImportSummary = {
-          totalRows: rawRows.length,
+          totalRows: dataRows.length,
           importedCount: newLeadsCount,
           updatedCount,
           duplicatesCount,
