@@ -52,7 +52,7 @@ function extractLocationFromText(text: any): string | undefined {
 function detectHeaderRowAndContext(
   grid: any[][],
   fileName = ''
-): { headerRowIndex: number; locationHint?: string } {
+): { headerRowIndex: number; locationHint?: string; score: number } {
   let bestRowIndex = 0;
   let maxScore = -1;
   let locationHint = extractLocationFromText(fileName);
@@ -104,7 +104,7 @@ function detectHeaderRowAndContext(
     bestRowIndex = 0;
   }
 
-  return { headerRowIndex: bestRowIndex, locationHint };
+  return { headerRowIndex: bestRowIndex, locationHint, score: maxScore };
 }
 
 const SUMMARY_PATTERNS = [
@@ -174,14 +174,29 @@ export async function parseLeadFile(
           throw new Error('The uploaded file has no sheets.');
         }
 
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Parse sheet as raw 2D grid of values to auto-detect header row
-        const grid = XLSX.utils.sheet_to_json<any[]>(worksheet, {
-          header: 1,
-          defval: '',
-        });
+        // Scan sheets in workbook to pick the best sheet with actual leads
+        let bestGrid: any[][] = [];
+        let bestHeaderInfo: { headerRowIndex: number; locationHint?: string; score: number } = {
+          headerRowIndex: 0,
+          locationHint: undefined,
+          score: -1,
+        };
+
+        for (const sheetName of workbook.SheetNames) {
+          const ws = workbook.Sheets[sheetName];
+          const testGrid = XLSX.utils.sheet_to_json<any[]>(ws, { header: 1, defval: '' });
+          if (!testGrid || testGrid.length === 0) continue;
+
+          const headerInfo = detectHeaderRowAndContext(testGrid, file.name);
+          const isLeadsSheet = /leads|prospects|contacts|businesses|data/i.test(sheetName);
+          const sheetBoost = isLeadsSheet ? 5 : 0;
+          if (headerInfo.score + sheetBoost > bestHeaderInfo.score) {
+            bestHeaderInfo = { ...headerInfo, score: headerInfo.score + sheetBoost };
+            bestGrid = testGrid;
+          }
+        }
+
+        const grid = bestGrid.length > 0 ? bestGrid : XLSX.utils.sheet_to_json<any[]>(workbook.Sheets[workbook.SheetNames[0]], { header: 1, defval: '' });
 
         if (!grid || grid.length === 0) {
           resolve({
@@ -199,7 +214,9 @@ export async function parseLeadFile(
         }
 
         // Detect header row index & location hint
-        const { headerRowIndex, locationHint } = detectHeaderRowAndContext(grid, file.name);
+        const { headerRowIndex, locationHint } = bestHeaderInfo.score >= 0
+          ? bestHeaderInfo
+          : detectHeaderRowAndContext(grid, file.name);
         const headerRow = (grid[headerRowIndex] || []).map((c) => String(c ?? '').trim());
 
         // Extract and filter valid data rows
